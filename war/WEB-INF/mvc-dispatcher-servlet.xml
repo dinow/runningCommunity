@@ -10,26 +10,23 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
  
-	<!-- 
-		Need DI a message into controller, so auto component scan is disabled, 
-		to avoid double create the movieController bean.
-                Only controller need this hack.
-	-->
-	<context:component-scan base-package="be.dno.running.web">
+    <context:component-scan base-package="be.dno.running.web">
 		<context:exclude-filter type="regex" expression="be.dno.running.web.Hello.*" />
 	</context:component-scan>
- 
+	
 	<mvc:annotation-driven />
-
- 
-	<bean
-	   class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
 			<value>/pages/</value>
 		</property>
 		<property name="suffix">
 			<value>.jsp</value>
 		</property>
+	</bean>
+	
+	<bean id="multipartResolver" class="org.gmr.web.multipart.GMultipartResolver">
+    	<property name="maxUploadSize" value="1048576" />
 	</bean>
  
 </beans>

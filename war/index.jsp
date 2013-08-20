@@ -12,12 +12,13 @@
 	Voici la liste des actions possibles:</br>
 	
 	<ul>
-	
+	<li><a href="/show_activities.do">Show activities</a></li>
+            <li><a href="/pages/upload_activity.jsp">Upload activities</a></li>
 	
 	<% if (userService.getCurrentUser() == null) { %>
             <li><p><a href="<%= userService.createLoginURL("/") %>">Se connecter</a></p></li>
         <% } else { %>
-            <li><a href="/show_activities.do">show_activities</a></li>
+            
             <li><p><a href="<%= userService.createLogoutURL("/") %>">Se déconnecter</a></p></li>
         <% } %>
 	
