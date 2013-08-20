@@ -16,7 +16,7 @@ import be.dno.running.entities.ActivityCategory;
 @RequestMapping(value = "/show_activities")
 public class ActivityCategoryController {
 	//http://viralpatel.net/blogs/spring-mvc-multi-row-submit-java-list/
-	private static List<ActivityCategory> activityCategories = new ArrayList<>();
+	private static List<ActivityCategory> activityCategories = new ArrayList<ActivityCategory>();
 	 
    
      
@@ -35,7 +35,7 @@ public class ActivityCategoryController {
 		String[] categories = {"Course", "EF", "SL", "Fractions", "Fartlek"};
 		for (String category : categories){
 			ActivityCategory ac = new ActivityCategory();
-			List<Activity> activities = new ArrayList<>();
+			List<Activity> activities = new ArrayList<Activity>();
 			ac.setExpended(true);
 			ac.setId(category);
 			ac.setLabel(category);

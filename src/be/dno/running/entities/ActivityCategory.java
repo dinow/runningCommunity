@@ -6,7 +6,7 @@ import java.util.List;
 public class ActivityCategory {
 	private String label;
     private String id;
-    private List<Activity> activities = new ArrayList<>();
+    private List<Activity> activities = new ArrayList<Activity>();
     private boolean expended= true;
 	public String getLabel() {
 		return label;
