@@ -1,9 +1,0 @@
-<?page title="DNO"?>
-<zk xmlns="http://www.zkoss.org/2005/zul">    
-	<window sclass="cardSys" border="none"
-		apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('be.dno.running.mvvm.IndexVM')">
-	
-   
-     </window>   
-</zk>

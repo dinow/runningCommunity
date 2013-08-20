@@ -16,13 +16,14 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jdo-api-3.0.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jsr107cache-1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jta-1.1.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/zcommon.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/zel.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/zhtml.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/zk.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/zkbind.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/zkplus.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/zul.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/zweb.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-webmvc-3.2.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-web-3.2.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-core-3.2.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-context-3.2.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-beans-3.2.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-expression-3.2.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-aop-3.2.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-context-support-3.2.4.RELEASE.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
