@@ -4,41 +4,89 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Key;
 
 
 
+@PersistenceCapable
 public class Activity implements Serializable {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8618949354798328756L;
+	private static final long serialVersionUID = -4239127223646826296L;
 
-	private String id;
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Key id;
+	
+	@Persistent
 	private String name;
+	
+	@Persistent
 	private String description;
+	
+	@Persistent
 	private String dateDebut;
+	
+	@Persistent
 	private String pace;
+	
+	@Persistent
 	private double speed;
+	
+	@Persistent
 	private List<Lap> laps = new ArrayList<Lap>();
+	
+	@Persistent
 	private long totalTime = -1;
+	
+	@Persistent
 	private int averageBpm = -1;
+	
+	@Persistent
 	private int maxBpm = -1;
+	
+	@Persistent
 	private double elevationPositive = -1;
+	
+	@Persistent
 	private int totalCalories = -1;
+	
+	@Persistent
 	private double totalDistance = -1;	
+	
+	@Persistent
 	private List<Lap> lapsBySameDistance = null;
+	
+	@Persistent
 	private List<Lap> lapsBySameTime = null;
+	
+	@Persistent
 	private double averageSecondForLapsBySameDistance = -1;
+	
+	@Persistent
 	private double averageDistanceForLapsBySameTime = -1;
+	
+	@Persistent
 	private double maxDeviationSecondForLapsBySameDistance = -1;
+	
+	@Persistent
 	private double maxDeviationDistanceForLapsBySameTime = -1;
 	
-	public String getId() {
+	public Key getId() {
 		return id;
 	}
-	public void setId(String id) {
+	
+	public void setId(Key id) {
 		this.id = id;
 	}
+	
 	public String getName() {
 		return name;
 	}
