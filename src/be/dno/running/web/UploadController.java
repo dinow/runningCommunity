@@ -13,6 +13,7 @@ import be.dno.running.entities.Activity;
 import be.dno.running.entities.xml.garmin.gpx.Gpx;
 import be.dno.running.entities.xml.garmin.tcx.TcxTrainingCenterDatabase;
 import be.dno.running.factories.ActivityFactory;
+import be.dno.running.persistence.GenericDao;
 import be.dno.running.xml.XmlToJavaConverter;
 
 @Controller
@@ -39,6 +40,13 @@ public class UploadController {
             		System.out.println(new Date() + " - Gpx Activity processed ! ");
             	}
             	
+            	// Persistence de l'activité
+            	System.out.println(new Date() + " - Attempting to create activity in datastore");
+            	GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
+            	activity = activityDao.create(activity);
+            	System.out.println(new Date() + " - Activity created with id: " + activity.getId());
+            	
+            	
             	return new ModelAndView("file_uploaded" , "fileContent", activity);
             }else{
             	return new ModelAndView("fail","message","Unknown file type");
@@ -58,4 +66,5 @@ public class UploadController {
 		
 		return null;
 	}
+	
 }
