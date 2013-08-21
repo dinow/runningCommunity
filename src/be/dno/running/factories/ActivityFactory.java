@@ -175,7 +175,7 @@ public class ActivityFactory {
 		activity.setMaxDeviationDistanceForLapsBySameTime(getMaxDeviationDistanceForLapsBySameTime(lapBySameTime, avgLapSameTime));
 		activity.setMaxDeviationSecondForLapsBySameDistance(getMaxDeviationSecondForLapsBySameDistance(lapBySameDistance, avgLapSameDist));
 		
-		List<Lap> intLap = new ArrayList<>();
+		List<Lap> intLap = new ArrayList<Lap>();
 		for (TcxLap lap : laps){
 			intLap.add(LapFactory.buildLap(lap));
 		}
@@ -234,13 +234,13 @@ public class ActivityFactory {
 	}
 	
 	public static List<Lap> getLapsBySameDistance(List<TcxLap> laps) {
-		List<Lap> lapsBySameDistance = new ArrayList<>();
+		List<Lap> lapsBySameDistance = new ArrayList<Lap>();
 		
-		Map<Double, List<Lap>> mapByDistance = new HashMap<>();
+		Map<Double, List<Lap>> mapByDistance = new HashMap<Double, List<Lap>>();
 		for (TcxLap lap : laps){
 			Double meters = Double.parseDouble(lap.getDistanceMeters());
 			List<Lap> currentLapsForDistance = mapByDistance.get(meters);
-			if (currentLapsForDistance == null) currentLapsForDistance = new ArrayList<>();
+			if (currentLapsForDistance == null) currentLapsForDistance = new ArrayList<Lap>();
 			currentLapsForDistance.add(LapFactory.buildLap(lap));
 			mapByDistance.put(meters, currentLapsForDistance);
 		}
@@ -256,12 +256,12 @@ public class ActivityFactory {
 	}
 
 	public static List<Lap> getLapsBySameTime(List<TcxLap> laps) {
-		List<Lap> lapsBySameTime = new ArrayList<>();
-		Map<Double, List<Lap>> mapByTime = new HashMap<>();
+		List<Lap> lapsBySameTime = new ArrayList<Lap>();
+		Map<Double, List<Lap>> mapByTime = new HashMap<Double, List<Lap>>();
 		for (TcxLap lap : laps){
 			double seconds = Double.parseDouble(lap.getTotalTimeSeconds());
 			List<Lap> currentLapsForTime = mapByTime.get(seconds);
-			if (currentLapsForTime == null) currentLapsForTime = new ArrayList<>();
+			if (currentLapsForTime == null) currentLapsForTime = new ArrayList<Lap>();
 			currentLapsForTime.add(LapFactory.buildLap(lap));
 			mapByTime.put(seconds, currentLapsForTime);
 		}

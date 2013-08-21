@@ -19,7 +19,7 @@ public class Activity implements Serializable {
 	private String dateDebut;
 	private String pace;
 	private double speed;
-	private List<Lap> laps = new ArrayList<>();
+	private List<Lap> laps = new ArrayList<Lap>();
 	private long totalTime = -1;
 	private int averageBpm = -1;
 	private int maxBpm = -1;

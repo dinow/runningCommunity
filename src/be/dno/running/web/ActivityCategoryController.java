@@ -15,7 +15,7 @@ import be.dno.running.entities.ActivityCategory;
 @RequestMapping(value = "/show_activities")
 public class ActivityCategoryController {
 
-	private static List<ActivityCategory> activityCategories = new ArrayList<>();
+	private static List<ActivityCategory> activityCategories = new ArrayList<ActivityCategory>();
 
      
     @RequestMapping(method = RequestMethod.GET)
