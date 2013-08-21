@@ -18,6 +18,9 @@ public class GpxTrkpt {
 	@XStreamAlias("time")
 	private String time;
 	
+	@XStreamAlias("extensions")
+	private GpxExtensions extensions;
+	
 	public String getLon() {
 		return lon;
 	}
@@ -42,5 +45,13 @@ public class GpxTrkpt {
 	public void setTime(String time) {
 		this.time = time;
 	}
+	public GpxExtensions getExtensions() {
+		return extensions;
+	}
+	public void setExtensions(GpxExtensions extensions) {
+		this.extensions = extensions;
+	}
+	
+	
 	
 }

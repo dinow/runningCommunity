@@ -1,34 +1,21 @@
 package be.dno.running.xml;
 
-import be.dno.running.entities.xml.garmin.gpx.Gpx;
-import be.dno.running.entities.xml.garmin.tcx.TrainingCenterDatabase;
+import java.util.Date;
 
 import com.wappworks.xstream.XStreamGae;
 
 public class XmlToJavaConverter {
-	public static Object convert(String xml, String fileCategory){
+	public static Object convert(String xml, Class mainClass){
 		XStreamGae xstream = new XStreamGae();
-		if (fileCategory.equals("TCX_GARMIN")){
-			TrainingCenterDatabase tcd = null;
-			Class[] classes = {TrainingCenterDatabase.class};
-			try{
-				xstream.processAnnotations(classes);
-				tcd = (TrainingCenterDatabase) xstream.fromXML(xml);
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}
-			return tcd;
-		}else if (fileCategory.equals("GPX_GARMIN")){
-			Gpx gpx = null;
-			Class[] classes = {Gpx.class};
-			try{
-				xstream.processAnnotations(classes);
-				gpx = (Gpx) xstream.fromXML(xml);
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}
-			return gpx;
+		Object ret = null;
+		try{
+			System.out.println(new Date() + " - Init converter with class " + mainClass);
+			xstream.processAnnotations(mainClass);
+			ret = (Object) xstream.fromXML(xml);
+			System.out.println(new Date() + " - Object created");
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
-		return null;
+		return ret;
 	}
 }
