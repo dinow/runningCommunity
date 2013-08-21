@@ -1,29 +1,34 @@
 package be.dno.running.xml;
 
-import be.dno.running.entities.xml.Activities;
-import be.dno.running.entities.xml.Author;
-import be.dno.running.entities.xml.Creator;
-import be.dno.running.entities.xml.Lap;
-import be.dno.running.entities.xml.TrainingCenterDatabase;
-import be.dno.running.entities.xml.XmlActivity;
+import be.dno.running.entities.xml.garmin.gpx.Gpx;
+import be.dno.running.entities.xml.garmin.tcx.TrainingCenterDatabase;
 
-import com.thoughtworks.xstream.XStream;
 import com.wappworks.xstream.XStreamGae;
 
 public class XmlToJavaConverter {
-	public static TrainingCenterDatabase convert(String xml){
+	public static Object convert(String xml, String fileCategory){
 		XStreamGae xstream = new XStreamGae();
-		TrainingCenterDatabase tcd = null;
-		Class[] classes = {Activities.class, Author.class, Creator.class, Lap.class, TrainingCenterDatabase.class, XmlActivity.class};
-		try{
-			System.out.println("Will deserialize from XML");
-			xstream.processAnnotations(classes);
-			tcd = (TrainingCenterDatabase) xstream.fromXML(xml);
-			System.out.println("tcd --> " + tcd);
-		}catch(Exception ex){
-			ex.printStackTrace();
+		if (fileCategory.equals("TCX_GARMIN")){
+			TrainingCenterDatabase tcd = null;
+			Class[] classes = {TrainingCenterDatabase.class};
+			try{
+				xstream.processAnnotations(classes);
+				tcd = (TrainingCenterDatabase) xstream.fromXML(xml);
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+			return tcd;
+		}else if (fileCategory.equals("GPX_GARMIN")){
+			Gpx gpx = null;
+			Class[] classes = {Gpx.class};
+			try{
+				xstream.processAnnotations(classes);
+				gpx = (Gpx) xstream.fromXML(xml);
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+			return gpx;
 		}
-		
-		return tcd;
+		return null;
 	}
 }

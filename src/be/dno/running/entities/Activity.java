@@ -3,17 +3,17 @@ package be.dno.running.entities;
 import java.io.Serializable;
 
 public class Activity implements Serializable {
-	 /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8618949354798328756L;
 
 	private String id;
-	 private String dateDebut;
-     private String distance;
-     private String time;
-     private String pace;
-     private String denivele;
+	private String dateDebut;
+	private String distance;
+	private String time;
+	private String pace;
+	private String denivele;
 	public String getId() {
 		return id;
 	}
@@ -50,6 +50,6 @@ public class Activity implements Serializable {
 	public void setDenivele(String denivele) {
 		this.denivele = denivele;
 	}
-     
-     
+
+
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import be.dno.running.entities.xml.TrainingCenterDatabase;
+import be.dno.running.entities.xml.garmin.tcx.TrainingCenterDatabase;
 import be.dno.running.xml.XmlToJavaConverter;
 
 @Controller
@@ -16,12 +16,30 @@ public class UploadController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView postUpload(MultiPartFileUpload upload, HttpServletRequest request) {
-		System.out.println("postUpload");
         if (upload.getFile().getSize() != 0) {
             String fileContent = new String(upload.getFile().getBytes());
-            TrainingCenterDatabase tcd = XmlToJavaConverter.convert(fileContent);   
-            return new ModelAndView("file_uploaded" , "fileContent", tcd);
+            String fileCategory = getFileCategory(fileContent);
+            String jspName = "file_uploaded";
+            if (fileCategory.contains("TCX")){
+            	jspName += "_tcx";
+            }else if (fileCategory.contains("GPX")){
+            	jspName += "_gpx";
+            }
+            Object tcd = XmlToJavaConverter.convert(fileContent,fileCategory);   
+            return new ModelAndView(jspName , "fileContent", tcd);
         }
 	    return new ModelAndView("fail");
+	}
+
+	private String getFileCategory(String fileContent) {
+		if(fileContent.contains("<TrainingCenterDatabase")){
+			return "TCX_GARMIN";
+		}
+		
+		if(fileContent.contains("<gpx")){
+			return "GPX_GARMIN";
+		}
+		
+		return "UNKNOWN";
 	}
 }

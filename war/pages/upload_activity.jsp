@@ -5,7 +5,7 @@
 <html>
 <body>
 <form id="file-upload" action="/upload_activity.do" enctype="multipart/form-data" method="post">
-    <label for="file">GPX:</label>
+    <label for="file">GPX ou TCX exportés depuis Garmin Connect:</label></br>
     <input name="file" type="file" />
     <input type="submit" value="Save" />
 </form>
