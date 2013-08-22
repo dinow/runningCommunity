@@ -287,10 +287,14 @@ public class ActivityFactory {
 			trckPoints.addAll(trkSeg.getTrkpts());
 		}
 		
-		Calendar c = DatatypeConverter.parseDateTime(gpx.getMetadata().getTime());
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		try{
+			Calendar c = DatatypeConverter.parseDateTime(gpx.getMetadata().getTime());
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			activity.setDateDebut(sdf.format(c.getTime()));
+		}catch(Exception ex){
+			System.out.println(ex.getMessage());
+		}
 		
-		activity.setDateDebut(sdf.format(c.getTime()));
 		activity.setAverageBpm(getAverageBpmGpx(trckPoints));
 		activity.setElevationPositive(getElevationPositiveGpx(trckPoints));
 		activity.setMaxBpm(getMaxBpmGpx(trckPoints));

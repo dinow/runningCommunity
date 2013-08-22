@@ -14,6 +14,12 @@ public class GpxMetadata {
 	@XStreamAlias("time")
 	private String time;
 	
+	@XStreamAlias("time")
+	private String name;
+	
+	@XStreamAlias("bounds ")
+	private String bounds;
+	
 	public GpxLink getLink() {
 		return link;
 	}
@@ -27,8 +33,10 @@ public class GpxMetadata {
 	@Override
 	public String toString() {
 		return "GpxMetadata [link=" + link + ", author=" + author + ", time="
-				+ time + "]";
+				+ time + ", name=" + name + ", bounds=" + bounds + "]";
 	}
+	
+	
 	
 	
 }
