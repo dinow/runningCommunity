@@ -8,34 +8,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import be.dno.running.entities.Activity;
 import be.dno.running.entities.ActivityCategory;
+import be.dno.running.persistence.GenericDao;
 
 
 @Controller
 @RequestMapping(value = "/show_activities")
 public class ActivityCategoryController {
 
-	private static List<ActivityCategory> activityCategories = new ArrayList<ActivityCategory>();
-
+	GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
      
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView get() {  
     	System.out.println("ModelAndView get");
-    	activityCategories.clear();
     	ActivityCategoryForm activityCategoryForm = new ActivityCategoryForm();
-    	activityCategoryForm.setActivityCategories(activityCategories);
+    	List<ActivityCategory> acs = new ArrayList<ActivityCategory>();
+    	ActivityCategory ac = new ActivityCategory();
+    	ac.setLabel("run");
+    	List<Activity> myActivities = activityDao.getAll();
+    	
+    	if (myActivities.isEmpty()){
+    		
+    	}
+    	ac.setActivities(myActivities);
+    	acs.add(ac);
+    	activityCategoryForm.setActivityCategories(acs);
         return new ModelAndView("show_activities" , "activityCategoryForm", activityCategoryForm);
 	}
-	
-	public static List<ActivityCategory> getActivityCategories() {
-		return activityCategories;
-	}
-
-	public static void setActivityCategories(
-			List<ActivityCategory> activityCategories) {
-		ActivityCategoryController.activityCategories = activityCategories;
-	}
-	
-	
-
 }

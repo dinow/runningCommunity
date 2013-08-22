@@ -8,23 +8,11 @@
 			userName = userService.getCurrentUser().getNickname();
 		}
 	%>
-	Bienvenue <%=userName %></br>
-	Voici la liste des actions possibles:</br>
-	
-	<ul>
-	<li><a href="/show_activities.do">Show activities</a></li>
-            <li><a href="/pages/upload_activity.jsp">Upload activities</a></li>
-	
+	Bienvenue <%=userName %>,&nbsp;<a href="/show_activities.do">Show activities</a>&nbsp;<a href="/pages/upload_activity.jsp">Upload activities</a>&nbsp;
 	<% if (userService.getCurrentUser() == null) { %>
-            <li><p><a href="<%= userService.createLoginURL("/") %>">Se connecter</a></p></li>
+            <a href="<%= userService.createLoginURL("/") %>">Se connecter</a>
         <% } else { %>
-            
-            <li><p><a href="<%= userService.createLogoutURL("/") %>">Se déconnecter</a></p></li>
+            <a href="<%= userService.createLogoutURL("/") %>">Se déconnecter</a>
         <% } %>
-	
-	</ul>
-	
-	
-	
 </body>
 </html>

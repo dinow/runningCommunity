@@ -1,6 +1,11 @@
 package be.dno.running.persistence;
 
+import java.util.List;
+
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
+
+
 	
 public class GenericDao <T>{
 	
@@ -17,6 +22,13 @@ public class GenericDao <T>{
 	
 	public T getById(String id){
 		return pm.getObjectById(type, id);
+	}
+	
+	public List getAll(){
+		Query q = pm.newQuery(type);
+		List results = (List) q.execute();
+		q.closeAll();
+		return results;
 	}
 		
 }
