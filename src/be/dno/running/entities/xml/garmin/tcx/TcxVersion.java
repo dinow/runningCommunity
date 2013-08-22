@@ -17,26 +17,26 @@ public class TcxVersion {
 	private String buildMinor;
 
 	public String getVersionMajor() {
-		return versionMajor;
+		return versionMajor == null ? "" : versionMajor;
 	}
 
 	public String getVersionMinor() {
-		return versionMinor;
+		return versionMinor == null ? "" : versionMinor;
 	}
 
 	public String getBuildMajor() {
-		return buildMajor;
+		return buildMajor == null ? "" : buildMajor;
 	}
 
 	public String getBuildMinor() {
-		return buildMinor;
+		return buildMinor == null ? "" : buildMinor;
 	}
 
 	@Override
 	public String toString() {
-		return "Version [versionMajor=" + versionMajor + ", versionMinor="
-				+ versionMinor + ", buildMajor=" + buildMajor + ", buildMinor="
-				+ buildMinor + "]";
+		return "Version [versionMajor=" + getVersionMajor() + ", versionMinor="
+				+ getVersionMinor() + ", buildMajor=" + getBuildMajor() + ", buildMinor="
+				+ getBuildMinor() + "]";
 	}
 	
 	

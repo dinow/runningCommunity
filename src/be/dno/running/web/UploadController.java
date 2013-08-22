@@ -22,6 +22,7 @@ public class UploadController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView postUpload(MultiPartFileUpload upload, HttpServletRequest request) {
+		System.out.println("UploadController postUpload");
         if (upload.getFile().getSize() != 0) {
             String fileContent = new String(upload.getFile().getBytes());
             Class mainClass = getFileCategory(fileContent);
@@ -40,14 +41,16 @@ public class UploadController {
             		System.out.println(new Date() + " - Gpx Activity processed ! ");
             	}
             	
-            	// Persistence de l'activitŽ
-            	System.out.println(new Date() + " - Attempting to create activity in datastore");
-            	GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
-            	activity = activityDao.create(activity);
-            	System.out.println(new Date() + " - Activity created with id: " + activity.getId());
-            	
-            	
-            	return new ModelAndView("file_uploaded" , "fileContent", activity);
+            	// Persistence de l'activité
+            	if (activity != null ){ //on va éviter d'uploader n'importe quoi...
+	            	System.out.println(new Date() + " - Attempting to create activity in datastore");
+	            	//GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
+	            	//activity = activityDao.create(activity);
+	            	System.out.println(new Date() + " - Activity created with id: " + activity.getId());
+	            	return new ModelAndView("file_uploaded" , "fileContent", activity);
+            	}else{
+            		return new ModelAndView("fail","message","cannot create activity");
+            	}
             }else{
             	return new ModelAndView("fail","message","Unknown file type");
             }

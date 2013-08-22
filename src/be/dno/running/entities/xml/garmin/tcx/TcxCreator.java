@@ -19,25 +19,25 @@ public class TcxCreator {
 	private TcxVersion version;
 	
 	public String getName() {
-		return name;
+		return name == null ? "" : name;
 	}
 
 	public String getUnitId() {
-		return unitId;
+		return unitId == null ? "" : unitId;
 	}
 
 	public String getProductID() {
-		return productID;
+		return productID == null ? "" : productID;
 	}
 
 	public TcxVersion getVersion() {
-		return version;
+		return version == null ? new TcxVersion() : version;
 	}
 
 	@Override
 	public String toString() {
-		return "TcxCreator [name=" + name + ", unitId=" + unitId
-				+ ", productID=" + productID + ", version=" + version + "]";
+			return "TcxCreator [name=" + getName() + ", unitId=" + getUnitId()
+				+ ", productID=" + getProductID() + ", version=" + getVersion().toString() + "]";
 	}
 	
 	

@@ -25,6 +25,24 @@ public class Lap implements Serializable {
 	private String startTime;
 	
 	@Persistent
+	private double deviationTimeSeconds;
+	
+	@Persistent
+	private double deviationMeters;
+	
+	@Persistent
+	private String totalTime;
+	
+	@Persistent
+	private String pace;
+	
+	@Persistent
+	private double speed;
+	
+	@Persistent
+	private double deviationTime;
+	
+	@Persistent
 	private double distanceMeters;
 	
 	@Persistent
@@ -104,6 +122,54 @@ public class Lap implements Serializable {
 
 	public void setDistanceMeters(double distanceMeters) {
 		this.distanceMeters = distanceMeters;
+	}
+
+	public double getDeviationTimeSeconds() {
+		return deviationTimeSeconds;
+	}
+
+	public void setDeviationTimeSeconds(double deviationTimeSeconds) {
+		this.deviationTimeSeconds = deviationTimeSeconds;
+	}
+
+	public String getTotalTime() {
+		return totalTime;
+	}
+
+	public void setTotalTime(String totalTime) {
+		this.totalTime = totalTime;
+	}
+
+	public String getPace() {
+		return pace;
+	}
+
+	public void setPace(String pace) {
+		this.pace = pace;
+	}
+
+	public double getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
+	public double getDeviationTime() {
+		return deviationTime;
+	}
+
+	public void setDeviationTime(double deviationTime) {
+		this.deviationTime = deviationTime;
+	}
+
+	public double getDeviationMeters() {
+		return deviationMeters;
+	}
+
+	public void setDeviationMeters(double deviationMeters) {
+		this.deviationMeters = deviationMeters;
 	}
 	
 	

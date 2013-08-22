@@ -9,6 +9,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import be.dno.running.helper.ConvertHelper;
+
 import com.google.appengine.api.datastore.Key;
 
 
@@ -71,6 +73,9 @@ public class Activity implements Serializable {
 	private double averageSecondForLapsBySameDistance = -1;
 	
 	@Persistent
+	private String averageTimeForLapsBySameDistance;
+	
+	@Persistent
 	private double averageDistanceForLapsBySameTime = -1;
 	
 	@Persistent
@@ -120,7 +125,7 @@ public class Activity implements Serializable {
 	}
 	
 	public List<Lap> getLaps() {
-		return laps;
+		return laps == null ? new ArrayList<Lap>() : laps;
 	}
 	public void setLaps(List<Lap> laps) {
 		this.laps = laps;
@@ -130,20 +135,7 @@ public class Activity implements Serializable {
 	}
 	
 	public String getTotalTimeStr() {
-		long tempTotalTime = totalTime;
-		long diff[] = new long[] { 0, 0, 0, 0 };
-	    /* sec */diff[3] = (tempTotalTime >= 60 ? tempTotalTime % 60 : tempTotalTime);
-	    /* min */diff[2] = (tempTotalTime = (tempTotalTime / 60)) >= 60 ? tempTotalTime % 60 : tempTotalTime;
-	    /* hours */diff[1] = (tempTotalTime = (tempTotalTime / 60)) >= 24 ? tempTotalTime % 24 : tempTotalTime;
-	    /* days */diff[0] = (tempTotalTime = (tempTotalTime / 24));
-
-		
-		return toDoubleDigit(diff[1])+":"+toDoubleDigit(diff[2])+":"+toDoubleDigit(diff[3]);
-	}
-	
-	private static String toDoubleDigit(long digit){
-		String s = digit + "";
-		return (s.length() == 1) ? "0"+s : s;
+		return ConvertHelper.toPace(totalTime);
 	}
 	
 	public void setTotalTime(double totalTime) {
@@ -181,13 +173,13 @@ public class Activity implements Serializable {
 	}
 	
 	public List<Lap> getLapsBySameDistance() {
-		return lapsBySameDistance;
+		return lapsBySameDistance == null ? new ArrayList<Lap>() : lapsBySameDistance;
 	}
 	public void setLapsBySameDistance(List<Lap> lapsBySameDistance) {
 		this.lapsBySameDistance = lapsBySameDistance;
 	}
 	public List<Lap> getLapsBySameTime() {
-		return lapsBySameTime;
+		return lapsBySameTime == null ? new ArrayList<Lap>() : lapsBySameTime;
 	}
 	public void setLapsBySameTime(List<Lap> lapsBySameTime) {
 		this.lapsBySameTime = lapsBySameTime;
@@ -219,6 +211,19 @@ public class Activity implements Serializable {
 	public void setMaxDeviationDistanceForLapsBySameTime(
 			double maxDeviationDistanceForLapsBySameTime) {
 		this.maxDeviationDistanceForLapsBySameTime = maxDeviationDistanceForLapsBySameTime;
+	}
+
+	public String getAverageTimeForLapsBySameDistance() {
+		return averageTimeForLapsBySameDistance;
+	}
+
+	public void setAverageTimeForLapsBySameDistance(
+			String averageTimeForLapsBySameDistance) {
+		this.averageTimeForLapsBySameDistance = averageTimeForLapsBySameDistance;
+	}
+
+	public void setTotalTime(long totalTime) {
+		this.totalTime = totalTime;
 	}
 	
 	

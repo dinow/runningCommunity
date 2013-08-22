@@ -43,38 +43,38 @@ public class TcxLap {
 	
 	
 	public TcxTrack getTrack() {
-		return track;
+		return track == null ? new TcxTrack() :track;
 	}
 
 	public TcxExtensions getExtensions() {
-		return extensions;
+		return extensions == null ? new TcxExtensions() :extensions;
 	}
 	
 	public String getIntensity() {
-		return intensity;
+		return intensity == null ? "" : intensity;
 	}
 	
 	public String getTriggerMethod() {
-		return triggerMethod;
+		return triggerMethod == null ? "" : triggerMethod;
 	}
 	
 	public String getStartTime() {
-		return startTime;
+		return startTime == null ? "" : startTime;
 	}
 	
 	public String getTotalTimeSeconds() {
-		return totalTimeSeconds;
+		return totalTimeSeconds == null ? "0.0" : totalTimeSeconds;
 	}
 	
 	public String getDistanceMeters() {
-		return distanceMeters;
+		return distanceMeters == null ? "0.0" : distanceMeters;
 	}
 	
 	public String getMaximumSpeed() {
-		return maximumSpeed;
+		return maximumSpeed == null ? "0.0" : maximumSpeed;
 	}
 	public String getCalories() {
-		return calories;
+		return calories == null ? "0" : calories;
 	}
 	public String getAverageHeartRateBpm() {
 		return averageHeartRateBpm == null ? "0" : averageHeartRateBpm.toString();

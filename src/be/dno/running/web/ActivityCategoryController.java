@@ -21,7 +21,7 @@ public class ActivityCategoryController {
      
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView get() {  
-    	System.out.println("ModelAndView get");
+    	System.out.println("ActivityCategoryController get");
     	ActivityCategoryForm activityCategoryForm = new ActivityCategoryForm();
     	List<ActivityCategory> acs = new ArrayList<ActivityCategory>();
     	ActivityCategory ac = new ActivityCategory();

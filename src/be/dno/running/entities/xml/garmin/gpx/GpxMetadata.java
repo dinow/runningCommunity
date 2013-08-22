@@ -8,6 +8,9 @@ public class GpxMetadata {
 	@XStreamAlias("link")
 	private GpxLink link;
 	
+	@XStreamAlias("author")
+	private GpxAuthor author;
+	
 	@XStreamAlias("time")
 	private String time;
 	
@@ -17,11 +20,15 @@ public class GpxMetadata {
 	public String getTime() {
 		return time;
 	}
+	
+	public GpxAuthor getAuthor() {
+		return author;
+	}
 	@Override
 	public String toString() {
-		return "[link=" + link + ", time=" + time + "]";
+		return "GpxMetadata [link=" + link + ", author=" + author + ", time="
+				+ time + "]";
 	}
-	
 	
 	
 }

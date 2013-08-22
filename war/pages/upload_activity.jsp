@@ -18,7 +18,10 @@
             <a href="<%= userService.createLogoutURL("/") %>">Se déconnecter</a>
         <% } %>
 <form id="file-upload" action="/upload_activity.do" enctype="multipart/form-data" method="post">
-    <label for="file">GPX ou TCX exportés depuis Garmin Connect:</label></br>
+	Fichiers supportés :<br/>
+	GPX : Garmin Connect, Endomodo<br/>
+	TCX : Garmin Connect, Endomodo<br/>
+    <label for="file">Fichier:</label>
     <input name="file" type="file" />
     <input type="submit" value="Save" />
 </form>

@@ -14,6 +14,6 @@
         <% } else { %>
             <a href="<%= userService.createLogoutURL("/") %>">Se déconnecter</a>
         <% } %>
-		${message }
+		<br/><h2>${message }</h2>
 	</body>
 </html>

@@ -76,13 +76,17 @@
 	</table>
 	
 	<br />
-	<h3>Laps identiques selon la distance, temps moyen : ${activity.averageSecondForLapsBySameDistance } écart maximun : ${activity.maxDeviationSecondForLapsBySameDistance }</h3>
+	<h3>Laps identiques selon la distance, temps moyen : ${activity.averageSecondForLapsBySameDistance } (${activity.averageTimeForLapsBySameDistance }) écart maximun : ${activity.maxDeviationSecondForLapsBySameDistance }</h3>
 	<table border="1">
 		<tr>
 			<th>startTime</th>
 			<th>totalTimeSeconds</th>
+			<th>deviationSeconds</th>
+			<th>totalTime</th>
+			<th>deviationTime</th>
 			<th>distanceMeters</th>
-			<th>maximumSpeed</th>
+			<th>pace</th>
+			<th>speed</th>
 			<th>calories</th>
 			<th>averageHeartRateBpm</th>
 			<th>maximumHeartRateBpm</th>
@@ -91,8 +95,12 @@
 			<tr>
 				<td>${lap.startTime}</td>
 				<td>${lap.totalTimeSeconds}</td>
+				<td>${lap.deviationTimeSeconds}</td>
+				<td>${lap.totalTime}</td>
+				<td>${lap.deviationTime}</td>
 				<td>${lap.distanceMeters}</td>
-				<td>${lap.maximumSpeed}</td>
+				<td>${lap.pace}</td>
+				<td>${lap.speed}</td>
 				<td>${lap.calories}</td>
 				<td>${lap.averageHeartRateBpm}</td>
 				<td>${lap.maximumHeartRateBpm}</td>
@@ -105,27 +113,29 @@
 		<tr>
 			<th>startTime</th>
 			<th>totalTimeSeconds</th>
+			<th>deviationMeters</th>
+			<th>totalTime</th>
 			<th>distanceMeters</th>
-			<th>maximumSpeed</th>
+			<th>pace</th>
+			<th>speed</th>
 			<th>calories</th>
 			<th>averageHeartRateBpm</th>
 			<th>maximumHeartRateBpm</th>
-			
 		</tr>
 		<c:forEach var="lap" items="${activity.lapsBySameTime }">
 			<tr>
 				<td>${lap.startTime}</td>
 				<td>${lap.totalTimeSeconds}</td>
+				<td>${lap.deviationMeters}</td>
+				<td>${lap.totalTime}</td>
 				<td>${lap.distanceMeters}</td>
-				<td>${lap.maximumSpeed}</td>
+				<td>${lap.pace}</td>
+				<td>${lap.speed}</td>
 				<td>${lap.calories}</td>
 				<td>${lap.averageHeartRateBpm}</td>
 				<td>${lap.maximumHeartRateBpm}</td>
-
 			</tr>
-
 		</c:forEach>
-
 	</table>
 	<br />
 	<h3>Laps bruts</h3>
@@ -134,7 +144,6 @@
 			<th>startTime</th>
 			<th>totalTimeSeconds</th>
 			<th>distanceMeters</th>
-			<th>maximumSpeed</th>
 			<th>calories</th>
 			<th>averageHeartRateBpm</th>
 			<th>maximumHeartRateBpm</th>
@@ -145,11 +154,9 @@
 				<td>${lap.startTime}</td>
 				<td>${lap.totalTimeSeconds}</td>
 				<td>${lap.distanceMeters}</td>
-				<td>${lap.maximumSpeed}</td>
 				<td>${lap.calories}</td>
 				<td>${lap.averageHeartRateBpm}</td>
-				<td>${lap.maximumHeartRateBpm}</td>
-				
+				<td>${lap.maximumHeartRateBpm}</td>	
 			</tr>
 
 		</c:forEach>
