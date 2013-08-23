@@ -24,9 +24,9 @@ public class GenericDao <T>{
 		return pm.getObjectById(type, id);
 	}
 	
-	public List getAll(){
+	public List<T> getAll(){
 		Query q = pm.newQuery(type);
-		List results = (List) q.execute();
+		List<T> results = (List) q.execute();
 		q.closeAll();
 		return results;
 	}

@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -27,7 +28,7 @@ import be.dno.running.entities.xml.garmin.tcx.TcxTrainingCenterDatabase;
 import be.dno.running.helper.ConvertHelper;
 
 public class ActivityFactory {
-	
+	private static final Logger log = Logger.getLogger(ActivityFactory.class.getName());
 	static class ActivityCalculatedValues{
 		private int averageBpm;
 		private double elevation;
@@ -292,7 +293,7 @@ public class ActivityFactory {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 			activity.setDateDebut(sdf.format(c.getTime()));
 		}catch(Exception ex){
-			System.out.println(ex.getMessage());
+			log.severe(ex.getMessage());
 		}
 		
 		activity.setAverageBpm(getAverageBpmGpx(trckPoints));
@@ -352,9 +353,10 @@ public class ActivityFactory {
 			if (null != pPrevious && null != pCurrent){
 				double distance = EarthCalc.getDistance(pPrevious, pCurrent); //in meters
 				if ("NaN".equals(distance+"")){
-					System.out.println("pPrevious : " + pPrevious);
-					System.out.println("pCurrent : " + pCurrent);
-					System.out.println("distance : " + distance);
+					log.warning("Cannot get distance for some points...");
+					log.fine("pPrevious : " + pPrevious);
+					log.fine("pCurrent : " + pCurrent);
+					log.fine("distance : " + distance);
 				}else{
 					totalDistance += distance;
 				}

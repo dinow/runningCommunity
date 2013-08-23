@@ -1,9 +1,10 @@
 package be.dno.running.entities.xml.garmin.tcx;
 
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("TrainingCenterDatabase")
-public class TcxTrainingCenterDatabase {
+public class TcxTrainingCenterDatabase{
 	
 	@XStreamAlias("Activities")
 	private TcxActivities activities;

@@ -15,6 +15,12 @@ public class GpxTrkpt {
 	@XStreamAlias("ele")
 	private String ele;
 	
+	@XStreamAlias("sat")
+	private String sat;
+	
+	@XStreamAlias("cmt")
+	private String cmt;
+	
 	@XStreamAlias("time")
 	private String time;
 	
@@ -50,6 +56,12 @@ public class GpxTrkpt {
 	}
 	public void setExtensions(GpxExtensions extensions) {
 		this.extensions = extensions;
+	}
+	public String getSat() {
+		return sat;
+	}
+	public String getCmt() {
+		return cmt;
 	}
 	
 	

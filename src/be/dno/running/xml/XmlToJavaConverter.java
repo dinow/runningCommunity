@@ -1,20 +1,22 @@
 package be.dno.running.xml;
 
-import java.util.Date;
+import java.util.logging.Logger;
+
 
 import com.wappworks.xstream.XStreamGae;
 
 public class XmlToJavaConverter {
+	private static final Logger log = Logger.getLogger(XmlToJavaConverter.class.getName());
 	public static Object convert(String xml, Class mainClass){
 		XStreamGae xstream = new XStreamGae();
 		Object ret = null;
 		try{
-			System.out.println(new Date() + " - Init converter with class " + mainClass);
+			log.fine("Init XmlToJavaConverter with class " + mainClass);
 			xstream.processAnnotations(mainClass);
 			ret = (Object) xstream.fromXML(xml);
-			System.out.println(new Date() + " - Object created");
+			log.fine("Object created");
 		}catch(Exception ex){
-			ex.printStackTrace();
+			log.severe(ex.getMessage());
 		}
 		return ret;
 	}

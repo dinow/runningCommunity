@@ -14,7 +14,7 @@ public class GpxMetadata {
 	@XStreamAlias("time")
 	private String time;
 	
-	@XStreamAlias("time")
+	@XStreamAlias("name")
 	private String name;
 	
 	@XStreamAlias("bounds ")

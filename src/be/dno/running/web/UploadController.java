@@ -1,6 +1,6 @@
 package be.dno.running.web;
 
-import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,17 +13,15 @@ import be.dno.running.entities.Activity;
 import be.dno.running.entities.xml.garmin.gpx.Gpx;
 import be.dno.running.entities.xml.garmin.tcx.TcxTrainingCenterDatabase;
 import be.dno.running.factories.ActivityFactory;
-import be.dno.running.persistence.GenericDao;
 import be.dno.running.xml.XmlToJavaConverter;
 
 @Controller
 @RequestMapping(value = "/upload_activity")
 public class UploadController {
-	
+	private static final Logger log = Logger.getLogger(UploadController.class.getName());
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView postUpload(MultiPartFileUpload upload, HttpServletRequest request) {
-		System.out.println("UploadController postUpload");
-        if (upload.getFile().getSize() != 0) {
+		if (upload.getFile().getSize() != 0) {
             String fileContent = new String(upload.getFile().getBytes());
             Class mainClass = getFileCategory(fileContent);
             if (mainClass != null){
@@ -32,29 +30,32 @@ public class UploadController {
             	Activity activity = null;
             	
             	if (tcd instanceof TcxTrainingCenterDatabase){
-            		System.out.println(new Date() + " - TcxTrainingCenterDatabase Activity to be processed");
+            		log.fine("TcxTrainingCenterDatabase Activity to be processed");
             		activity = ActivityFactory.buildActivity((TcxTrainingCenterDatabase)tcd);
-            		System.out.println(new Date() + " - TcxTrainingCenterDatabase Activity processed ! ");
+            		log.fine("TcxTrainingCenterDatabase Activity processed ! ");
             	}else if (tcd instanceof Gpx){
-            		System.out.println(new Date() + " - Gpx Activity to be processed");
+            		log.fine("Gpx Activity to be processed");
             		activity = ActivityFactory.buildActivity((Gpx)tcd);
-            		System.out.println(new Date() + " - Gpx Activity processed ! ");
+            		log.fine("Gpx Activity processed ! ");
             	}
             	
-            	// Persistence de l'activité
-            	if (activity != null ){ //on va éviter d'uploader n'importe quoi...
-	            	System.out.println(new Date() + " - Attempting to create activity in datastore");
+            	// Persistence de l'activitï¿½
+            	if (activity != null ){ //on va ï¿½viter d'uploader n'importe quoi...
+            		log.fine("Attempting to create activity in datastore");
 	            	//GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
 	            	//activity = activityDao.create(activity);
-	            	System.out.println(new Date() + " - Activity created with id: " + activity.getId());
+            		log.fine("Activity created with id: " + activity.getId());
 	            	return new ModelAndView("file_uploaded" , "fileContent", activity);
             	}else{
+            		log.severe("cannot create activity...");
             		return new ModelAndView("fail","message","cannot create activity");
             	}
             }else{
+            	log.warning("Unknown file type ("+upload.getFile().getName()+")");
             	return new ModelAndView("fail","message","Unknown file type");
             }
         }
+		log.warning("No uploaded file ???");
 	    return new ModelAndView("fail","message","No uploaded file ???");
 	}
 

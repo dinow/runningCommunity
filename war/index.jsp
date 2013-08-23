@@ -2,17 +2,27 @@
 <%@ page import="com.google.appengine.api.users.*" %>
 <html>
 <body>
-	<%UserService userService = UserServiceFactory.getUserService();
-		String userName = "anonyme";
-		if (userService.getCurrentUser() != null) {
-			userName = userService.getCurrentUser().getNickname();
-		}
-	%>
-	Bienvenue <%=userName %>,&nbsp;<a href="/show_activities.do">Show activities</a>&nbsp;<a href="/pages/upload_activity.jsp">Upload activities</a>&nbsp;
-	<% if (userService.getCurrentUser() == null) { %>
-            <a href="<%= userService.createLoginURL("/") %>">Se connecter</a>
-        <% } else { %>
-            <a href="<%= userService.createLogoutURL("/") %>">Se déconnecter</a>
-        <% } %>
+	
+	<%@ include file="header.jsp"%>
+	
+	<div style="width: 100%">
+		Bienvenue dans la version <%= com.google.appengine.api.utils.SystemProperty.applicationVersion.get() %> de l'application<br/>
+		<p>
+			Nouveautées:<br/>
+			Import des fichiers GPX/TCX provenant de:<br/>
+			<ul>
+				<li>Strava</li>
+				<li>Garmin Connect</li>
+				<li>IsmoothrunPro</li>
+				<li>Polar</li>
+				<li>Endomodo</li>
+			</ul>
+		
+		</p>
+	
+	</div>
+	
+	
+	
 </body>
 </html>

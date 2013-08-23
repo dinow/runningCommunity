@@ -17,6 +17,9 @@ public class GpxTrk {
 	@XStreamAlias("src")
 	private String src;
 	
+	@XStreamAlias("desc")
+	private String desc;
+	
 	@XStreamImplicit(itemFieldName="trkseg")
 	private List<GpxTrkseg> trkseg;
 	
@@ -39,6 +42,10 @@ public class GpxTrk {
 	}
 	public GpxLink getLink() {
 		return link;
+	}
+
+	public String getDesc() {
+		return desc;
 	}
 	
 }

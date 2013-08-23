@@ -1,5 +1,6 @@
 package be.dno.running.entities.xml.garmin.gpx;
 
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("gpx")
@@ -12,7 +13,7 @@ public class Gpx {
 	private GpxTrk trk;
 	
 	public GpxMetadata getMetadata() {
-		return metadata;
+		return metadata == null ? new GpxMetadata() : metadata;
 	}
 	public GpxTrk getTrk() {
 		return trk;
