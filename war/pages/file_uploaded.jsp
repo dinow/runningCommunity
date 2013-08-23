@@ -2,10 +2,9 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="com.google.appengine.api.users.*" %>
 <html>
 <body>
-	<%@ include file="header.jsp"%>
+	<%@ include file="../header.jsp"%>
 	<c:set var="activity" value="${fileContent}" />
 	<table border="1">
 		<tr><th colspan="2">Informations sur l'activité</th></tr>
