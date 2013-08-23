@@ -4,36 +4,90 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+@PersistenceCapable
 public class User implements Serializable{
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1527601931838521296L;
+	
+	@PrimaryKey
+	@Persistent
+	private String userID;
+	
+	@Persistent
 	private String googleUserName;
+	
+	@Persistent
 	private String hfrUserName;
 	//Liste des id pour GarminConnect, Strava, ...
+	
 	private List<ExternalWebSiteIdentity> externalWebSiteIdentities;
+	
+	@Persistent
 	private String localisation;
 	private List<Challenge> completedChallenges;
 	private List<Challenge> ongoingChallenges;
 	private List<Badge> earnedBadges;
+	
+	@Persistent
 	private int poids;
+	
+	@Persistent
 	private int poidsSelonMoyenneHFR;
+	
+	@Persistent
 	private double pointure;
+	
+	@Persistent
 	private int taille;
+	
+	@Persistent
 	private char sexe;
+	
+	@Persistent
 	private double VMA;
+	
+	@Persistent
 	private double IMC;
+	
+	@Persistent
 	private double IMG;
+	
+	@Persistent
 	private Date dateNaissance;
 	private List<Record> records;
+	private List<Activity> activities;
+	
+	@Persistent
 	private double cuisse;
+	
+	@Persistent
 	private double mollet;
+	
+	@Persistent
 	private int fcRepos;
+	
+	@Persistent
 	private int fcMaxReele;
+	
+	@Persistent
 	private int fcMaxTheorique;
 	
-	
+	public List<Activity> getActivities() {
+		return activities;
+	}
+	public void setActivities(List<Activity> activities) {
+		this.activities = activities;
+	}
+	public String getUserID() {
+		return userID;
+	}
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
 	public String getGoogleUserName() {
 		return googleUserName;
 	}

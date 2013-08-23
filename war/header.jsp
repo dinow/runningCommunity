@@ -9,6 +9,7 @@
 			&nbsp;<a href="/show_activities.do">My activities</a>
 			&nbsp;<a href="/pages/upload_activity.jsp">Upload new activity</a>
 			&nbsp;<a href="/show_activities.do?type=all">Other activities</a>
+			&nbsp;<a href="/show_users.do">Show all users</a>
             &nbsp;<a href="<%= userService.createLogoutURL("/") %>">Logout</a>
 		<%}else{%>
 			&nbsp;<a href="/show_activities.do?type=all">Other activities</a>

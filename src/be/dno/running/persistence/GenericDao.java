@@ -2,6 +2,7 @@ package be.dno.running.persistence;
 
 import java.util.List;
 
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
@@ -9,8 +10,8 @@ import javax.jdo.Query;
 	
 public class GenericDao <T>{
 	
-	private Class<T> type;
-	private static final PersistenceManager pm = PMFactory.getPM();
+	protected Class<T> type;
+	protected static final PersistenceManager pm = PMFactory.getPM();
 	
 	public GenericDao(Class<T> type) {
         this.type = type;
@@ -21,7 +22,11 @@ public class GenericDao <T>{
 	}
 	
 	public T getById(String id){
-		return pm.getObjectById(type, id);
+		try{
+			return pm.getObjectById(type, id);
+		}catch(JDOObjectNotFoundException nfound){
+			return null;
+		}
 	}
 	
 	public List<T> getAll(){
