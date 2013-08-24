@@ -11,7 +11,7 @@ import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
 public class Lap implements Serializable {
-
+	
 	private static final long serialVersionUID = 4968183579101802958L;
 
 	@PrimaryKey
@@ -26,43 +26,45 @@ public class Lap implements Serializable {
 	
 	@Persistent
 	private double deviationMeters;
-	
+
 	@Persistent
 	private String totalTime;
-	
+
 	@Persistent
 	private String pace;
-	
+
 	@Persistent
 	private double speed;
-	
+
 	@Persistent
 	private double deviationTime;
-	
+
 	@Persistent
 	private double distanceMeters;
-	
+
 	@Persistent
 	private double totalTimeSeconds;
-	
+
 	@Persistent
 	private double maximumSpeed;
-	
+
 	@Persistent
 	private double calories;
-	
+
 	@Persistent
 	private int averageHeartRateBpm;
-	
+
 	@Persistent
 	private int maximumHeartRateBpm;
 
+	
+	
+	public Lap() {
+		super();
+	}
+
 	public Key getId() {
 		return id;
-	}
-	
-	public void setId(Key id) {
-		this.id = id;
 	}
 	
 	public String getStartTime() {

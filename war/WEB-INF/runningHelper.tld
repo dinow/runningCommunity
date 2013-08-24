@@ -21,5 +21,15 @@
             ${rh:isCollectionEmpty(collection)}
         </example>
     </function>
+    
+    <function>
+        <description>remove html characters</description>
+        <name>htmlEncode</name>
+        <function-class>be.dno.running.helper.JspHelper</function-class>
+        <function-signature>java.lang.String htmlEncode(java.lang.String)</function-signature>
+        <example>
+            ${rh:htmlEncode(strInput)}
+        </example>
+    </function>
 
 </taglib>

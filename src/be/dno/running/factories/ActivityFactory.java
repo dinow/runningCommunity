@@ -222,8 +222,8 @@ public class ActivityFactory {
 		return acv;
 	}
 	
-	public static Activity buildActivity(TcxTrainingCenterDatabase tcd){
-		Activity activity = new Activity();
+	public static Activity buildActivity(TcxTrainingCenterDatabase tcd, String userId){
+		Activity activity = new Activity(userId);
 		TcxAuthor author = tcd.getAuthor();
 		TcxCreator creator = tcd.getActivities().getActivity().getCreator();
 		String description = author != null ? author.toString() : "";
@@ -252,8 +252,8 @@ public class ActivityFactory {
 		activity.setTotalCalories(acv.getTotalCalories());
 		
 		
-		activity.setLapsBySameDistance(acv.getLapBySameDistance());
-		activity.setLapsBySameTime(acv.getLapBySameTime());
+		//activity.setLapsBySameDistance(acv.getLapBySameDistance());
+		//activity.setLapsBySameTime(acv.getLapBySameTime());
 		
 		activity.setAverageDistanceForLapsBySameTime(acv.getAvgLapSameTime());
 		activity.setAverageSecondForLapsBySameDistance(acv.getAvgLapSameDist());
@@ -267,7 +267,7 @@ public class ActivityFactory {
 		for (TcxLap lap : laps){
 			intLap.add(LapFactory.buildLap(lap));
 		}
-		activity.setLaps(intLap);	
+		//activity.setLaps(intLap);	
 		activity.setSpeed(ConvertHelper.limitDecimal((activity.getTotalDistance()) / (activity.getTotalTime() / 60 / 60)));
 		
 		double secondsforonekilo = activity.getTotalTime() / activity.getTotalDistance();
@@ -275,8 +275,8 @@ public class ActivityFactory {
 		
 		return activity;
 	}	
-	public static Activity buildActivity(Gpx gpx){
-		Activity activity = new Activity();
+	public static Activity buildActivity(Gpx gpx, String userId){
+		Activity activity = new Activity(userId);
 		
 		String description = gpx.getMetadata().toString();
 		description += "</br>" + gpx.getTrk().getName();

@@ -11,23 +11,74 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-
 import be.dno.running.entities.Activity;
 import be.dno.running.entities.User;
 import be.dno.running.entities.xml.garmin.gpx.Gpx;
 import be.dno.running.entities.xml.garmin.tcx.TcxTrainingCenterDatabase;
 import be.dno.running.factories.ActivityFactory;
+import be.dno.running.helper.JspHelper;
 import be.dno.running.persistence.GenericDao;
 import be.dno.running.xml.XmlToJavaConverter;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
 @Controller
-@RequestMapping(value = "/upload_activity")
+
 public class UploadController {
 	private static final Logger log = Logger.getLogger(UploadController.class.getName());
-	@RequestMapping(method = RequestMethod.POST)
+	
+	@RequestMapping(value = "/saveAction", method = RequestMethod.POST)
+	public ModelAndView updateActivity(HttpServletRequest request) {
+		String activityID = JspHelper.htmlDecode(request.getParameter("activityId"));
+		String isPrivate = request.getParameter("private");
+		String type = request.getParameter("type");
+		UserService userService = UserServiceFactory.getUserService();
+		String userID = userService.getCurrentUser().getUserId();
+	
+		GenericDao<User> userDao = new GenericDao<User>(User.class);
+		
+		System.out.println("updateActivity, input parameters \""+activityID+"\", \"" + userID + "\"");
+		System.out.println("updateActivity, input parameters \""+isPrivate+"\", \"" + type + "\"");
+		
+		//TODO...
+		User user = userDao.getById(userID);
+		Activity activity = null;
+		List<Activity> activities = user.getActivities();
+		for(final Activity tactivity : activities){
+			if (tactivity.getId().getId() == Long.parseLong(activityID)){
+				activity = tactivity;
+			}
+		}
+		
+		
+		if(activity != null){
+			activity.setActivityPrivate(!isPrivate.equalsIgnoreCase("null"));
+			activity.setActivityCategory(type);
+			userDao.update(user);
+		}else{
+			System.out.println("Err: Activity is null");
+		}
+		return new ModelAndView("home");
+	}
+	
+	@RequestMapping(value = "/upload_activity", method = RequestMethod.POST)
 	public ModelAndView postUpload(MultiPartFileUpload upload, HttpServletRequest request) {
+		UserService userService = UserServiceFactory.getUserService();
+		String userID = userService.getCurrentUser().getUserId();
+		GenericDao<User> userDao = new GenericDao<User>(User.class);
+		User user = userDao.getById(userID);
+		if (user == null){
+			log.fine("User is new, creating...");
+			user = new User();
+			user.setGoogleUserName(userService.getCurrentUser().getNickname());
+			user.setUserID(userID);
+		}else{
+			log.fine("User retrieved with id " + user.getUserID());
+		}
+		
 		if (upload.getFile().getSize() != 0) {
             String fileContent = new String(upload.getFile().getBytes());
             Class mainClass = getFileCategory(fileContent);
@@ -38,46 +89,34 @@ public class UploadController {
             	
             	if (tcd instanceof TcxTrainingCenterDatabase){
             		log.fine("TcxTrainingCenterDatabase Activity to be processed");
-            		activity = ActivityFactory.buildActivity((TcxTrainingCenterDatabase)tcd);
+            		activity = ActivityFactory.buildActivity((TcxTrainingCenterDatabase)tcd,userID);
             		log.fine("TcxTrainingCenterDatabase Activity processed ! ");
             	}else if (tcd instanceof Gpx){
             		log.fine("Gpx Activity to be processed");
-            		activity = ActivityFactory.buildActivity((Gpx)tcd);
+            		activity = ActivityFactory.buildActivity((Gpx)tcd,userID);
             		log.fine("Gpx Activity processed ! ");
             	}
             	
             	// Persistence de l'activité
             	if (activity != null ){ //on va éviter d'uploader n'importe quoi...
             		activity.setActivityCategory("run");
-            		
+            		activity.setActivityPrivate(false);
             		log.fine("Attempting to add activity into user in datastore");
-            		GenericDao<User> userDao = new GenericDao<User>(User.class);
-            		UserService userService = UserServiceFactory.getUserService();
+            		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
+            		
             		if (userService.getCurrentUser() != null){
             			log.fine("User is still connected");
-            			String userID = userService.getCurrentUser().getUserId();
-            			
-            			User user = userDao.getById(userID);
-            			if (user == null){
-            				log.fine("User is new, creating...");
-            				user = new User();
-            				user.setGoogleUserName(userService.getCurrentUser().getNickname());
-            				user.setUserID(userID);
-            			}else{
-            				log.fine("User retrieved with id " + user.getUserID());
-            			}
-            			
             			List<Activity> activities = user.getActivities();
             			if (activities == null){
-            				log.fine("Creating empty list of activity");
+            				System.out.println("Creating empty list of activity");
             				activities = new ArrayList<Activity>();
             			}
             			activities.add(activity);
-            			log.fine("Total activities for user " + activities.size());
-            			user = userDao.create(user);
-            			System.out.println("User created / updated with id " + user.getUserID());
+            			System.out.println("Total activities for user " + activities.size());
+            			userDao.create(user);
+            			activityDao.create(activity);
             		}
-            		
+            		System.out.println("Activity id " + activity.getId());
 	            	return new ModelAndView("file_uploaded" , "fileContent", activity);
             	}else{
             		log.severe("cannot create activity...");

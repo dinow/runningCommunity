@@ -27,8 +27,10 @@ public class ShowActivitiesController {
 			log.warning("Not logged in user tried to access show_activities page...");
 			return new ModelAndView("fail","message","Unknown user");
 		}
-		GenericDao<User> userDao = new GenericDao<User>(User.class);
-		User currentUser = userDao.getById(userService.getCurrentUser().getUserId());	
+		GenericDao<User> userDao = new GenericDao<User>(User.class); 
+		User currentUser = userDao.getById(userService.getCurrentUser().getUserId());
+		
+		System.out.println("activities: " + currentUser.getActivities());
 		return new ModelAndView("show_activities" , "activities", currentUser.getActivities());
 	}
 	

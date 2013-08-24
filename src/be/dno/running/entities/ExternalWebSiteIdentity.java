@@ -1,6 +1,16 @@
 package be.dno.running.entities;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import com.google.appengine.api.datastore.Key;
+
 public class ExternalWebSiteIdentity {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Key id;
+	
 	private ExternalWebSite externalWebSite;
 	private String externalID;
 	public ExternalWebSite getExternalWebSite() {

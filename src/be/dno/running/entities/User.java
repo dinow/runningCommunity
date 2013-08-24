@@ -24,64 +24,58 @@ public class User implements Serializable{
 	private String hfrUserName;
 	
 	//Liste des id pour GarminConnect, Strava, ...
-	//TODO
-	//private List<ExternalWebSiteIdentity> externalWebSiteIdentities;
+	/*@ManyToOne(fetch=FetchType.EAGER)
+	private List<ExternalWebSiteIdentity> externalWebSiteIdentities;*/
 	
-	@Persistent
-	private String localisation;
+	//private String localisation;
 	
-	//TODO
-	//private List<Challenge> completedChallenges;
-	//private List<Challenge> ongoingChallenges;
-	//private List<Badge> earnedBadges;
+	/*@ManyToOne(fetch=FetchType.EAGER)
+	private List<Challenge> completedChallenges;
 	
-	@Persistent
-	private int poids;
+	@ManyToOne(fetch=FetchType.EAGER)
+	private List<Challenge> ongoingChallenges;
 	
-	@Persistent
+	@ManyToOne(fetch=FetchType.EAGER)
+	private List<Badge> earnedBadges;*/
+	
+	/*private int poids;
+	
 	private int poidsSelonMoyenneHFR;
 	
-	@Persistent
 	private double pointure;
 	
-	@Persistent
 	private int taille;
 	
-	@Persistent
 	private char sexe;
 	
-	@Persistent
 	private double VMA;
 	
-	@Persistent
 	private double IMC;
-	
-	@Persistent
+
 	private double IMG;
 	
-	@Persistent
-	private Date dateNaissance;
+	private Date dateNaissance;*/
 	
-	//TODO
-	//private List<Record> records;
+	/*@ManyToOne(fetch=FetchType.EAGER)
+	private List<Record> records;*/
 	
 	@Persistent
 	private List<Activity> activities;
 	
-	@Persistent
-	private double cuisse;
+	/*private double cuisse;
 	
-	@Persistent
 	private double mollet;
 	
-	@Persistent
 	private int fcRepos;
 	
-	@Persistent
 	private int fcMaxReele;
 	
-	@Persistent
-	private int fcMaxTheorique;
+	private int fcMaxTheorique;*/
+	
+
+	public User() {
+		super();
+	}
 	
 	public List<Activity> getActivities() {
 		return activities;
@@ -107,101 +101,14 @@ public class User implements Serializable{
 	public void setHfrUserName(String hfrUserName) {
 		this.hfrUserName = hfrUserName;
 	}
-	public String getLocalisation() {
-		return localisation;
-	}
-	public void setLocalisation(String localisation) {
-		this.localisation = localisation;
-	}
-	public int getPoids() {
-		return poids;
-	}
-	public void setPoids(int poids) {
-		this.poids = poids;
-	}
-	public int getPoidsSelonMoyenneHFR() {
-		return poidsSelonMoyenneHFR;
-	}
-	public void setPoidsSelonMoyenneHFR(int poidsSelonMoyenneHFR) {
-		this.poidsSelonMoyenneHFR = poidsSelonMoyenneHFR;
-	}
-	public double getPointure() {
-		return pointure;
-	}
-	public void setPointure(double pointure) {
-		this.pointure = pointure;
-	}
-	public int getTaille() {
-		return taille;
-	}
-	public void setTaille(int taille) {
-		this.taille = taille;
-	}
-	public char getSexe() {
-		return sexe;
-	}
-	public void setSexe(char sexe) {
-		this.sexe = sexe;
-	}
-	public double getVMA() {
-		return VMA;
-	}
-	public void setVMA(double vMA) {
-		VMA = vMA;
-	}
-	public double getIMC() {
-		return IMC;
-	}
-	public void setIMC(double iMC) {
-		IMC = iMC;
-	}
-	public double getIMG() {
-		return IMG;
-	}
-	public void setIMG(double iMG) {
-		IMG = iMG;
-	}
-	public Date getDateNaissance() {
-		return dateNaissance;
-	}
-	public void setDateNaissance(Date dateNaissance) {
-		this.dateNaissance = dateNaissance;
-	}
-	public double getCuisse() {
-		return cuisse;
-	}
-	public void setCuisse(double cuisse) {
-		this.cuisse = cuisse;
-	}
-	public double getMollet() {
-		return mollet;
-	}
-	public void setMollet(double mollet) {
-		this.mollet = mollet;
-	}
-	public int getFcRepos() {
-		return fcRepos;
-	}
-	public void setFcRepos(int fcRepos) {
-		this.fcRepos = fcRepos;
-	}
-	public int getFcMaxReele() {
-		return fcMaxReele;
-	}
-	public void setFcMaxReele(int fcMaxReele) {
-		this.fcMaxReele = fcMaxReele;
-	}
-	public int getFcMaxTheorique() {
-		return fcMaxTheorique;
-	}
-	public void setFcMaxTheorique(int fcMaxTheorique) {
-		this.fcMaxTheorique = fcMaxTheorique;
-	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 	
-	
-	
+	@Override
+	public String toString() {
+		return "User [userID=" + userID + ", googleUserName=" + googleUserName
+				+ "]";
+	}
 	
 }
