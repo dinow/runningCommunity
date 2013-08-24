@@ -46,8 +46,10 @@ public class UploadController {
             		log.fine("Gpx Activity processed ! ");
             	}
             	
-            	// Persistence de l'activit�
+            	// Persistence de l'activité
             	if (activity != null ){ //on va éviter d'uploader n'importe quoi...
+            		activity.setActivityCategory("run");
+            		
             		log.fine("Attempting to add activity into user in datastore");
             		GenericDao<User> userDao = new GenericDao<User>(User.class);
             		UserService userService = UserServiceFactory.getUserService();

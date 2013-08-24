@@ -22,15 +22,18 @@ public class User implements Serializable{
 	
 	@Persistent
 	private String hfrUserName;
-	//Liste des id pour GarminConnect, Strava, ...
 	
-	private List<ExternalWebSiteIdentity> externalWebSiteIdentities;
+	//Liste des id pour GarminConnect, Strava, ...
+	//TODO
+	//private List<ExternalWebSiteIdentity> externalWebSiteIdentities;
 	
 	@Persistent
 	private String localisation;
-	private List<Challenge> completedChallenges;
-	private List<Challenge> ongoingChallenges;
-	private List<Badge> earnedBadges;
+	
+	//TODO
+	//private List<Challenge> completedChallenges;
+	//private List<Challenge> ongoingChallenges;
+	//private List<Badge> earnedBadges;
 	
 	@Persistent
 	private int poids;
@@ -58,7 +61,11 @@ public class User implements Serializable{
 	
 	@Persistent
 	private Date dateNaissance;
-	private List<Record> records;
+	
+	//TODO
+	//private List<Record> records;
+	
+	@Persistent
 	private List<Activity> activities;
 	
 	@Persistent
@@ -100,36 +107,11 @@ public class User implements Serializable{
 	public void setHfrUserName(String hfrUserName) {
 		this.hfrUserName = hfrUserName;
 	}
-	public List<ExternalWebSiteIdentity> getExternalWebSiteIdentities() {
-		return externalWebSiteIdentities;
-	}
-	public void setExternalWebSiteIdentities(
-			List<ExternalWebSiteIdentity> externalWebSiteIdentities) {
-		this.externalWebSiteIdentities = externalWebSiteIdentities;
-	}
 	public String getLocalisation() {
 		return localisation;
 	}
 	public void setLocalisation(String localisation) {
 		this.localisation = localisation;
-	}
-	public List<Challenge> getCompletedChallenges() {
-		return completedChallenges;
-	}
-	public void setCompletedChallenges(List<Challenge> completedChallenges) {
-		this.completedChallenges = completedChallenges;
-	}
-	public List<Challenge> getOngoingChallenges() {
-		return ongoingChallenges;
-	}
-	public void setOngoingChallenges(List<Challenge> ongoingChallenges) {
-		this.ongoingChallenges = ongoingChallenges;
-	}
-	public List<Badge> getEarnedBadges() {
-		return earnedBadges;
-	}
-	public void setEarnedBadges(List<Badge> earnedBadges) {
-		this.earnedBadges = earnedBadges;
 	}
 	public int getPoids() {
 		return poids;
@@ -184,12 +166,6 @@ public class User implements Serializable{
 	}
 	public void setDateNaissance(Date dateNaissance) {
 		this.dateNaissance = dateNaissance;
-	}
-	public List<Record> getRecords() {
-		return records;
-	}
-	public void setRecords(List<Record> records) {
-		this.records = records;
 	}
 	public double getCuisse() {
 		return cuisse;

@@ -12,9 +12,6 @@ import com.google.appengine.api.datastore.Key;
 @PersistenceCapable
 public class Lap implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4968183579101802958L;
 
 	@PrimaryKey

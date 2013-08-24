@@ -18,9 +18,6 @@ import com.google.appengine.api.datastore.Key;
 @PersistenceCapable
 public class Activity implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4239127223646826296L;
 
 	@PrimaryKey
@@ -84,6 +81,17 @@ public class Activity implements Serializable {
 	@Persistent
 	private double maxDeviationDistanceForLapsBySameTime = -1;
 	
+	@Persistent
+	private String activityCategory;
+	
+	public String getActivityCategory() {
+		return activityCategory;
+	}
+
+	public void setActivityCategory(String activityCategory) {
+		this.activityCategory = activityCategory;
+	}
+
 	public Key getId() {
 		return id;
 	}

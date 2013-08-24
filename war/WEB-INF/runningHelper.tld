@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+  version="2.0">
+
+    <description>Running Helper</description>
+    <display-name>Running Helper</display-name>
+    <tlib-version>0.1</tlib-version>
+    <short-name>rh</short-name>
+    <uri>http://caphfr.appsport.com/taglib/functions</uri>
+
+
+    <function>
+        <description>return true if the collection is empty</description>
+        <name>isCollectionEmpty</name>
+        <function-class>be.dno.running.helper.JspHelper</function-class>
+        <function-signature>boolean isCollectionEmpty(java.util.Collection)</function-signature>
+        <example>
+            ${rh:isCollectionEmpty(collection)}
+        </example>
+    </function>
+
+</taglib>

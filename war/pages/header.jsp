@@ -6,7 +6,7 @@
 			String userName = userService.getCurrentUser().getNickname();
 		%>
 			Welcome <%=userName %>,
-			&nbsp;<a href="/show_activities.do">My activities</a>
+			&nbsp;<a href="/show_my_activities.do">My activities</a>
 			&nbsp;<a href="/pages/upload_activity.jsp">Upload new activity</a>
 			&nbsp;<a href="/show_activities.do?type=all">Other activities</a>
 			&nbsp;<a href="/show_users.do">Show all users</a>

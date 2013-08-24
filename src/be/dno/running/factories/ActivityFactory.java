@@ -305,6 +305,7 @@ public class ActivityFactory {
 		
 		double secondsforonekilo = activity.getTotalTime() / activity.getTotalDistance();
 		activity.setPace(ConvertHelper.toPace(Double.valueOf(secondsforonekilo).longValue()));
+		
 		return activity;
 	}
 	
