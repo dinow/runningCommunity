@@ -96,32 +96,6 @@ public class Activity implements Serializable {
 		super();
 	}
 
-	
-
-	public List<Lap> getLaps() {
-		return laps;
-	}
-
-	public void setLaps(List<Lap> laps) {
-		this.laps = laps;
-	}
-
-	public List<Lap> getLapsBySameDistance() {
-		return lapsBySameDistance;
-	}
-
-	public void setLapsBySameDistance(List<Lap> lapsBySameDistance) {
-		this.lapsBySameDistance = lapsBySameDistance;
-	}
-
-	public List<Lap> getLapsBySameTime() {
-		return lapsBySameTime;
-	}
-
-	public void setLapsBySameTime(List<Lap> lapsBySameTime) {
-		this.lapsBySameTime = lapsBySameTime;
-	}
-
 	public Key getId() {
 		return id;
 	}
@@ -174,12 +148,12 @@ public class Activity implements Serializable {
 		this.speed = speed;
 	}
 	
-	/*public List<Lap> getLaps() {
+	public List<Lap> getLaps() {
 		return laps == null ? new ArrayList<Lap>() : laps;
 	}
 	public void setLaps(List<Lap> laps) {
 		this.laps = laps;
-	}*/
+	}
 	public double getTotalTime() {
 		return totalTime;
 	}
@@ -222,7 +196,7 @@ public class Activity implements Serializable {
 		this.totalDistance = totalDistance;
 	}
 	
-	/*public List<Lap> getLapsBySameDistance() {
+	public List<Lap> getLapsBySameDistance() {
 		return lapsBySameDistance == null ? new ArrayList<Lap>() : lapsBySameDistance;
 	}
 	public void setLapsBySameDistance(List<Lap> lapsBySameDistance) {
@@ -233,7 +207,7 @@ public class Activity implements Serializable {
 	}
 	public void setLapsBySameTime(List<Lap> lapsBySameTime) {
 		this.lapsBySameTime = lapsBySameTime;
-	}*/
+	}
 	public double getAverageSecondForLapsBySameDistance() {
 		return averageSecondForLapsBySameDistance;
 	}

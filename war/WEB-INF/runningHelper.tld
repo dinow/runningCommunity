@@ -31,5 +31,15 @@
             ${rh:htmlEncode(strInput)}
         </example>
     </function>
+    
+    <function>
+        <description>return the human readable application version</description>
+        <name>getCleanVersion</name>
+        <function-class>be.dno.running.helper.JspHelper</function-class>
+        <function-signature>java.lang.String getCleanVersion()</function-signature>
+        <example>
+            ${rh:getCleanVersion()}
+        </example>
+    </function>
 
 </taglib>

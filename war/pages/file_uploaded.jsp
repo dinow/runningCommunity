@@ -71,7 +71,7 @@
 
 	</table>
 
-	<br /> Activité sauvée
+	<br /> L'activité sera sauvée dans quelques secondes, merci de patienter un tout petit peu... (trop louche...)
 	<form action="/saveAction.do" method="post">
 		Activité privée: <input type="checkbox" value="private" name="private" /><br /> Type
 		d'activité: <select name="type">

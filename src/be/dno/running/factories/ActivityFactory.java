@@ -252,8 +252,8 @@ public class ActivityFactory {
 		activity.setTotalCalories(acv.getTotalCalories());
 		
 		
-		//activity.setLapsBySameDistance(acv.getLapBySameDistance());
-		//activity.setLapsBySameTime(acv.getLapBySameTime());
+		activity.setLapsBySameDistance(acv.getLapBySameDistance());
+		activity.setLapsBySameTime(acv.getLapBySameTime());
 		
 		activity.setAverageDistanceForLapsBySameTime(acv.getAvgLapSameTime());
 		activity.setAverageSecondForLapsBySameDistance(acv.getAvgLapSameDist());
@@ -267,7 +267,7 @@ public class ActivityFactory {
 		for (TcxLap lap : laps){
 			intLap.add(LapFactory.buildLap(lap));
 		}
-		//activity.setLaps(intLap);	
+		activity.setLaps(intLap);	
 		activity.setSpeed(ConvertHelper.limitDecimal((activity.getTotalDistance()) / (activity.getTotalTime() / 60 / 60)));
 		
 		double secondsforonekilo = activity.getTotalTime() / activity.getTotalDistance();
