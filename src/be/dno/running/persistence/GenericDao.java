@@ -27,6 +27,14 @@ public class GenericDao <T>{
 	public void update(T o) {
 		pm.refresh(o);
 	}
+	
+	public T getById(Long id){
+		try{
+			return pm.getObjectById(type, id);
+		}catch(JDOObjectNotFoundException nfound){
+			return null;
+		}
+	}
 
 	public T getById(Serializable id){
 		try{
