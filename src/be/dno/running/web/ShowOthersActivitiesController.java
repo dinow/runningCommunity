@@ -1,7 +1,5 @@
 package be.dno.running.web;
 
-import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,6 @@ import be.dno.running.persistence.ActivityDao;
 @RequestMapping(value = "/show_others_activities")
 public class ShowOthersActivitiesController {
 	
-	private static final Logger log = Logger.getLogger(ShowActivitiesController.class.getName());
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView showActivities(HttpServletRequest request) {
 		ActivityDao adao = new ActivityDao();

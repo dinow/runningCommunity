@@ -20,7 +20,12 @@ package com.grum.geocalc;
  */
 public class DegreeCoordinate extends Coordinate {
 
-    public DegreeCoordinate(double decimalDegrees) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7208094376548034180L;
+
+	public DegreeCoordinate(double decimalDegrees) {
         this.decimalDegrees = decimalDegrees;
     }
 }

@@ -1,6 +1,7 @@
 package be.dno.running.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -8,6 +9,8 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Key;
+
+import be.dno.running.helper.ConvertHelper;
 
 @PersistenceCapable
 public class Lap implements Serializable {
@@ -19,7 +22,7 @@ public class Lap implements Serializable {
 	private Key id;
 	
 	@Persistent
-	private String startTime;
+	private Date startTime;
 	
 	@Persistent
 	private double deviationTimeSeconds;
@@ -57,21 +60,53 @@ public class Lap implements Serializable {
 	@Persistent
 	private int maximumHeartRateBpm;
 
+	@Persistent
+	private double kmHeureDiffAverageActivity;
 	
+	@Persistent
+	private String timeDiffAverageActivity;
 	
 	public Lap() {
 		super();
+	}
+	
+	public double getKmHeureDiffAverageActivity() {
+		return kmHeureDiffAverageActivity;
+	}
+
+	public void setKmHeureDiffAverageActivity(double kmHeureDiffAverageActivity) {
+		this.kmHeureDiffAverageActivity = kmHeureDiffAverageActivity;
+	}
+
+	public String getTimeDiffAverageActivity() {
+		return timeDiffAverageActivity;
+	}
+
+
+
+	public void setTimeDiffAverageActivity(String timeDiffAverageActivity) {
+		this.timeDiffAverageActivity = timeDiffAverageActivity;
+	}
+
+	public String getCss(){
+		if (kmHeureDiffAverageActivity > 0.0) return "lapPositive";
+		if (kmHeureDiffAverageActivity < 0.0) return "lapNegative";
+		return "lapNeutral";
 	}
 
 	public Key getId() {
 		return id;
 	}
 	
-	public String getStartTime() {
+	public Date getStartTime() {
 		return startTime;
 	}
+	
+	public String getStrStartTime() {
+		return ConvertHelper.dateToString(startTime);
+	}
 
-	public void setStartTime(String startTime) {
+	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
 
@@ -170,6 +205,15 @@ public class Lap implements Serializable {
 	public void setDeviationMeters(double deviationMeters) {
 		this.deviationMeters = deviationMeters;
 	}
+
+	@Override
+	public String toString() {
+		return "Lap [totalTime=" + totalTime + ", pace=" + pace
+				+ ", distanceMeters=" + distanceMeters + ", totalTimeSeconds="
+				+ totalTimeSeconds + "]";
+	}
+
+	
 	
 	
 }

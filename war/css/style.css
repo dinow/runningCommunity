@@ -1,3 +1,50 @@
-body,p,a,span,h1,h2,h3,td,th {
-	font-family: Verdana;
+@font-face{
+font-family: OpenSansRegular;
+	src: url('../fonts/OpenSans-Regular.ttf');
+}
+body,p,a,span,h1,h2,h3,td,th,div {
+	font-family: OpenSansRegular, Verdana;
+}
+
+body {
+	margin: 0px;
+}
+
+a:VISITED, a:HOVER, a:ACTIVE, a:LINK{
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
+}
+
+span.loggedUser{
+	font-style: italic;
+}
+
+div.headerDiv{
+	width:100%; 
+	background-color: #cdcdcd; 
+	height: 30px; 
+	padding-top: 10px;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+}
+
+div.mainPage{
+	padding-top:60px;
+	width: 100%;
+	padding-left: 40px;
+	padding-right: 40px;
+}
+
+tr.lapNeutral{
+	background-color: #efefef;
+}
+
+tr.lapPositive{
+	background-color: #aa0000;
+}
+
+tr.lapNegative{
+	background-color: 00aa00;
 }

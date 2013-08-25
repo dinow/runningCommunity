@@ -11,16 +11,15 @@
 	
 	<%@ include file="header.jsp"%>
 	<div class="mainPage">
-		Bienvenue dans l'application de gestion des activités du team CAP@HFR (et invités :o)<br/>
-			Nouveautées:<br/>
-			Import des fichiers GPX/TCX provenant de:<br/>
-			<ul>
-				<li>Strava</li>
-				<li>Garmin Connect</li>
-				<li>IsmoothrunPro</li>
-				<li>Polar</li>
-				<li>Endomodo</li>
-			</ul>
+		Version: ${rh:getCleanVersion()}<br/>
+		Contact: <a href="mailto:didiernowak@gmail.com?subject=Question sur cap@hfr">didiernowak@gmail.com</a><br/>
+		GitHub: <a href="https://github.com/dinow/runningCommunity">https://github.com/dinow/runningCommunity</a>
+		<br />
+		<br />
+		Application en beta version, aucune garantie au sujet de la persistance des données uploadées, c'est juste pour le fun (pour l'instant :D).<br/>
 	</div>
+	
+	
+	
 </body>
 </html>

@@ -1,20 +1,24 @@
 package be.dno.running.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.api.datastore.Key;
-
-@Entity
+@PersistenceCapable
 public class Record {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key id;
 	
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.SEQUENCE)
+	private Long id;
+	
+	@Persistent
 	private int distanceInMeter;
+	
+	@Persistent
 	private long timeInMs;
+	
+	@Persistent
 	private String displayName;
 	
 	public String getDisplayName() {
@@ -34,6 +38,9 @@ public class Record {
 	}
 	public void setTimeInMs(long timeInMs) {
 		this.timeInMs = timeInMs;
+	}
+	public Long getId() {
+		return id;
 	}
 	
 }

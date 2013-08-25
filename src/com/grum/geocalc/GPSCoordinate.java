@@ -20,7 +20,12 @@ package com.grum.geocalc;
  */
 public class GPSCoordinate extends DMSCoordinate {
 
-    public GPSCoordinate(double wholeDegrees, double minutes) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8578918137572659059L;
+
+	public GPSCoordinate(double wholeDegrees, double minutes) {
         super(wholeDegrees, minutes, 0);
     }
 }

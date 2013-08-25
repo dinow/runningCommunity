@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.mortbay.log.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,8 +20,6 @@ import be.dno.running.helper.JspHelper;
 import be.dno.running.persistence.GenericDao;
 import be.dno.running.xml.XmlToJavaConverter;
 
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -33,41 +30,57 @@ public class UploadController {
 	
 	@RequestMapping(value = "/saveAction", method = RequestMethod.POST)
 	public ModelAndView updateActivity(HttpServletRequest request) {
-		Long activityId = Long.parseLong(request.getParameter("activityId"));
+		String activityID = JspHelper.htmlDecode(request.getParameter("activityId"));
 		String isPrivate = request.getParameter("private");
 		String type = request.getParameter("type");
 		
-		log.info("activityID : " + activityId);
-		log.info("isPrivate : " + isPrivate);
-		log.info("activtypeityID : " + type);
+		UserService userService = UserServiceFactory.getUserService();
+		String userID = userService.getCurrentUser().getUserId();
+	
+		GenericDao<User> userDao = new GenericDao<User>(User.class);
+		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class); 
+		User user = userDao.getById(userID);
+		Activity activity = null;
+		List<Activity> activities = new ArrayList<Activity>();
+		for(Long activityId : user.getActivityIds()){
+			activities.add(activityDao.getById(activityId));
+		}
+		for(final Activity tactivity : activities){
+			if (tactivity.getId().longValue() == Long.parseLong(activityID)){
+				activity = tactivity;
+			}
+		}
 		
-		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
-		Activity activity = activityDao.getById(activityId);
 		
 		if(activity != null){
 			activity.setActivityPrivate(null != isPrivate);
 			activity.setActivityCategory(type);
-			activityDao.update(activity);
+			userDao.update(user);
 		}else{
 			log.severe("Err: Activity is null");
 		}
 		return new ModelAndView("home");
 	}
 	
+	
+	@RequestMapping(value = "/upload_activity", method = RequestMethod.GET)
+	public ModelAndView postUploadRedirect(MultiPartFileUpload upload, HttpServletRequest request) {
+		return new ModelAndView("upload_activity");
+	}
+	
 	@RequestMapping(value = "/upload_activity", method = RequestMethod.POST)
 	public ModelAndView postUpload(MultiPartFileUpload upload, HttpServletRequest request) {
 		UserService userService = UserServiceFactory.getUserService();
-		String userId = userService.getCurrentUser().getUserId();
+		String userID = userService.getCurrentUser().getUserId();
 		GenericDao<User> userDao = new GenericDao<User>(User.class);
-		User user = userDao.getById(userId);
+		User user = userDao.getById(userID);
 		if (user == null){
 			log.fine("User is new, creating...");
 			user = new User();
 			user.setGoogleUserName(userService.getCurrentUser().getNickname());
-			user.setId(userId);
-			userDao.create(user);
+			user.setUserID(userID);
 		}else{
-			log.fine("User retrieved with id " + user.getId());
+			log.fine("User retrieved with id " + user.getUserID());
 		}
 		
 		if (upload.getFile().getSize() != 0) {
@@ -80,11 +93,11 @@ public class UploadController {
             	
             	if (tcd instanceof TcxTrainingCenterDatabase){
             		log.fine("TcxTrainingCenterDatabase Activity to be processed");
-            		activity = ActivityFactory.buildActivity((TcxTrainingCenterDatabase)tcd,userId);
+            		activity = ActivityFactory.buildActivity((TcxTrainingCenterDatabase)tcd,userID);
             		log.fine("TcxTrainingCenterDatabase Activity processed ! ");
             	}else if (tcd instanceof Gpx){
             		log.fine("Gpx Activity to be processed");
-            		activity = ActivityFactory.buildActivity((Gpx)tcd,userId);
+            		activity = ActivityFactory.buildActivity((Gpx)tcd,userID);
             		log.fine("Gpx Activity processed ! ");
             	}
             	
@@ -95,20 +108,18 @@ public class UploadController {
             		log.fine("Attempting to add activity into user in datastore");
             		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
             		
+            		
             		if (userService.getCurrentUser() != null){
             			log.fine("User is still connected");
-            			List<Long> activities = user.getActivities();
-            			if (activities == null){
-            				System.out.println("Creating empty list of activity");
-            				activities = new ArrayList<Long>();
-            			}
+            			activity.setUserName(userService.getCurrentUser().getNickname());
             			activity = activityDao.create(activity);
-            			System.out.println("activity saved");
-            			activities.add(activity.getId());
-            			user.setActivities(activities);
-            			userDao.update(user);
-            			System.out.println("user updated");
+            			if (user.getActivityIds() == null){
+            				user.setActivityIds(new ArrayList<Long>());
+            			}
+            			user.getActivityIds().add(activity.getId());
+            			userDao.create(user);
             		}
+            		System.out.println("Activity id " + activity.getId());
 	            	return new ModelAndView("file_uploaded" , "fileContent", activity);
             	}else{
             		log.severe("cannot create activity...");

@@ -7,6 +7,8 @@ import java.util.Date;
 import com.google.appengine.api.utils.SystemProperty;
 
 public class JspHelper {
+	
+	@SuppressWarnings("rawtypes") 
 	public static boolean isCollectionEmpty(Collection c){
 		return c == null || c.isEmpty();
 	}
@@ -24,9 +26,9 @@ public class JspHelper {
 		String[] versions = version.split("\\.");
 		String ret = versions[0];
 		try{
-			Date deployed = new Date(Long.parseLong(versions[1]));
+			Date uploadDate = new Date(Long.parseLong(versions[1]) / (2 << 27) * 1000);
 			SimpleDateFormat sdf = new SimpleDateFormat ("yyyy/MM/dd HH:mm:ss");
-			ret += " deployed on " + sdf.format(deployed);
+			ret += " since " + sdf.format(uploadDate) + " GMT";
 		}catch(Exception ex){}
 		return ret;
 	}

@@ -20,7 +20,11 @@ package com.grum.geocalc;
  */
 public class RadianCoordinate extends Coordinate {
 
-    double radians;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6976475236320651816L;
+	double radians;
 
     public RadianCoordinate(double radians) {
         this.decimalDegrees = Math.toDegrees(radians);

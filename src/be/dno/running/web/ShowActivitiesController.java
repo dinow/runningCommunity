@@ -31,14 +31,15 @@ public class ShowActivitiesController {
 			return new ModelAndView("fail","message","Unknown user");
 		}
 		GenericDao<User> userDao = new GenericDao<User>(User.class); 
+		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class); 
 		User currentUser = userDao.getById(userService.getCurrentUser().getUserId());
+		
 		List<Activity> activities = new ArrayList<Activity>();
-		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
-		for(Long activityId : currentUser.getActivities()){
-			Activity activity = activityDao.getById(activityId);
-			activities.add(activity);
+		for(Long activityId : currentUser.getActivityIds()){
+			activities.add(activityDao.getById(activityId));
 		}
-		log.info("activities: " + currentUser.getActivities());
+		
+		log.info("activities: " + activities);
 		return new ModelAndView("show_activities" , "activities", activities);
 	}
 	

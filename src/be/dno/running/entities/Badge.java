@@ -1,19 +1,21 @@
 package be.dno.running.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.api.datastore.Key;
-
-@Entity
+@PersistenceCapable
 public class Badge {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key id;
 	
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.SEQUENCE)
+	private Long id;
+	
+	@Persistent
 	private String name;
+	
+	@Persistent
 	private String image;
 
 	public String getName() {
@@ -33,7 +35,7 @@ public class Badge {
 		this.image = image;
 	}
 
-	public Key getId() {
+	public Long getId() {
 		return id;
 	}
 }

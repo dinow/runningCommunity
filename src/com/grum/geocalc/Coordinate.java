@@ -23,7 +23,11 @@ import java.math.RoundingMode;
  */
 abstract public class Coordinate implements Serializable {
 
-    //degrees
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3246021582335613037L;
+	//degrees
     double decimalDegrees;
 
     public double getValue() {
