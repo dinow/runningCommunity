@@ -30,32 +30,28 @@ public class UploadController {
 	
 	@RequestMapping(value = "/saveAction", method = RequestMethod.POST)
 	public ModelAndView updateActivity(HttpServletRequest request) {
-		String activityID = JspHelper.htmlDecode(request.getParameter("activityId"));
+		Long activityID = Long.parseLong(request.getParameter("activityId"));
 		String isPrivate = request.getParameter("private");
 		String type = request.getParameter("type");
+		String name = request.getParameter("name");
 		
 		UserService userService = UserServiceFactory.getUserService();
 		String userID = userService.getCurrentUser().getUserId();
 	
-		GenericDao<User> userDao = new GenericDao<User>(User.class);
 		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class); 
-		User user = userDao.getById(userID);
-		Activity activity = null;
-		List<Activity> activities = new ArrayList<Activity>();
-		for(Long activityId : user.getActivityIds()){
-			activities.add(activityDao.getById(activityId));
-		}
-		for(final Activity tactivity : activities){
-			if (tactivity.getId().longValue() == Long.parseLong(activityID)){
-				activity = tactivity;
-			}
-		}
-		
+		Activity activity = activityDao.getById(activityID); //pas nécessaire de boucler
 		
 		if(activity != null){
-			activity.setActivityPrivate(null != isPrivate);
-			activity.setActivityCategory(type);
-			userDao.update(user);
+			if(activity.getUserid().equals(userID)){
+				activity.setActivityPrivate(null != isPrivate);
+				activity.setActivityCategory(type);
+				activity.setName(name);
+				activityDao.update(activity);
+			}
+			else {
+				log.severe("Err: Operation not allowed");
+			}
+			
 		}else{
 			log.severe("Err: Activity is null");
 		}
@@ -79,6 +75,7 @@ public class UploadController {
 			user = new User();
 			user.setGoogleUserName(userService.getCurrentUser().getNickname());
 			user.setUserID(userID);
+			userDao.create(user); // On crée le user maintenant, on le modifie après
 		}else{
 			log.fine("User retrieved with id " + user.getUserID());
 		}
@@ -108,7 +105,6 @@ public class UploadController {
             		log.fine("Attempting to add activity into user in datastore");
             		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
             		
-            		
             		if (userService.getCurrentUser() != null){
             			log.fine("User is still connected");
             			activity.setUserName(userService.getCurrentUser().getNickname());
@@ -117,7 +113,7 @@ public class UploadController {
             				user.setActivityIds(new ArrayList<Long>());
             			}
             			user.getActivityIds().add(activity.getId());
-            			userDao.create(user);
+            			userDao.update(user); //update ici car le create écrase un user existant
             		}
             		System.out.println("Activity id " + activity.getId());
 	            	return new ModelAndView("file_uploaded" , "fileContent", activity);

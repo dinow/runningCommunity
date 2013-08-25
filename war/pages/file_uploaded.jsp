@@ -20,14 +20,16 @@
 
 	<br /> L'activité sera sauvée dans quelques secondes, merci de patienter un tout petit peu... (trop louche...)
 	<form action="/saveAction.do" method="post">
-		Activité privée: <input type="checkbox" value="private" name="private" /><br /> Type
-		d'activité: <select name="type">
+		Activité privée: <input type="checkbox" value="private" name="private" /> <br/> 
+		Type d'activité: 
+		<select name="type">
 			<option value="run" selected="selected">Run</option>
 			<option value="race">Race</option>
 			<option value="SL">SL</option>
 			<option value="Workout">Workout</option>
 			<option value="Other">Other</option>
 		</select><br/>
+		Nom de l'activité: <input type="text" name="name"><br/>
 		<input type="submit" value="Save" />
 		<input type="hidden" name="activityId" value="${activity.id}"/>
 	</form>

@@ -23,6 +23,9 @@ public class Activity implements Serializable {
 	@Persistent
 	private String userName;
 	
+	@Persistent 
+	String userId;
+	
 	@Persistent
 	private String name;
 	
@@ -91,6 +94,7 @@ public class Activity implements Serializable {
 	
 	public Activity(String userId) {
 		super();
+		this.userId = userId;
 	}
 	
 	public Activity() {
@@ -275,6 +279,14 @@ public class Activity implements Serializable {
 
 	public void setLapsBySplitDistance(List<Lap> lapsBySplitDistance) {
 		this.lapsBySplitDistance = lapsBySplitDistance;
+	}
+
+	public String getUserid() {
+		return userId;
+	}
+
+	public void setUserid(String userid) {
+		this.userId = userid;
 	}
 	
 }
