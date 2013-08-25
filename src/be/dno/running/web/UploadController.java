@@ -33,36 +33,21 @@ public class UploadController {
 	
 	@RequestMapping(value = "/saveAction", method = RequestMethod.POST)
 	public ModelAndView updateActivity(HttpServletRequest request) {
-		String activityID = JspHelper.htmlDecode(request.getParameter("activityId"));
+		Long activityId = Long.parseLong(request.getParameter("activityId"));
 		String isPrivate = request.getParameter("private");
 		String type = request.getParameter("type");
 		
-		Log.debug("activityID : " + activityID);
-		Log.debug("isPrivate : " + isPrivate);
-		Log.debug("activtypeityID : " + type);
+		log.info("activityID : " + activityId);
+		log.info("isPrivate : " + isPrivate);
+		log.info("activtypeityID : " + type);
 		
-		
-		UserService userService = UserServiceFactory.getUserService();
-		String userID = userService.getCurrentUser().getUserId();
-	
-		GenericDao<User> userDao = new GenericDao<User>(User.class);
-		
-		//TODO...
-		User user = userDao.getById(userID);
-		Activity activity = null;
-		List<Activity> activities = user.getActivities();
-		for(final Activity tactivity : activities){
-			Log.debug(tactivity.getId().getId() +"=="+ Long.parseLong(activityID) + " -> " + (tactivity.getId().getId() == Long.parseLong(activityID)));
-			if (tactivity.getId().getId() == Long.parseLong(activityID)){
-				activity = tactivity;
-			}
-		}
-		
+		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
+		Activity activity = activityDao.getById(activityId);
 		
 		if(activity != null){
 			activity.setActivityPrivate(null != isPrivate);
 			activity.setActivityCategory(type);
-			userDao.update(user);
+			activityDao.update(activity);
 		}else{
 			log.severe("Err: Activity is null");
 		}
@@ -72,16 +57,17 @@ public class UploadController {
 	@RequestMapping(value = "/upload_activity", method = RequestMethod.POST)
 	public ModelAndView postUpload(MultiPartFileUpload upload, HttpServletRequest request) {
 		UserService userService = UserServiceFactory.getUserService();
-		String userID = userService.getCurrentUser().getUserId();
+		String userId = userService.getCurrentUser().getUserId();
 		GenericDao<User> userDao = new GenericDao<User>(User.class);
-		User user = userDao.getById(userID);
+		User user = userDao.getById(userId);
 		if (user == null){
 			log.fine("User is new, creating...");
 			user = new User();
 			user.setGoogleUserName(userService.getCurrentUser().getNickname());
-			user.setUserID(userID);
+			user.setId(userId);
+			userDao.create(user);
 		}else{
-			log.fine("User retrieved with id " + user.getUserID());
+			log.fine("User retrieved with id " + user.getId());
 		}
 		
 		if (upload.getFile().getSize() != 0) {
@@ -94,11 +80,11 @@ public class UploadController {
             	
             	if (tcd instanceof TcxTrainingCenterDatabase){
             		log.fine("TcxTrainingCenterDatabase Activity to be processed");
-            		activity = ActivityFactory.buildActivity((TcxTrainingCenterDatabase)tcd,userID);
+            		activity = ActivityFactory.buildActivity((TcxTrainingCenterDatabase)tcd,userId);
             		log.fine("TcxTrainingCenterDatabase Activity processed ! ");
             	}else if (tcd instanceof Gpx){
             		log.fine("Gpx Activity to be processed");
-            		activity = ActivityFactory.buildActivity((Gpx)tcd,userID);
+            		activity = ActivityFactory.buildActivity((Gpx)tcd,userId);
             		log.fine("Gpx Activity processed ! ");
             	}
             	
@@ -111,17 +97,18 @@ public class UploadController {
             		
             		if (userService.getCurrentUser() != null){
             			log.fine("User is still connected");
-            			List<Activity> activities = user.getActivities();
+            			List<Long> activities = user.getActivities();
             			if (activities == null){
             				System.out.println("Creating empty list of activity");
-            				activities = new ArrayList<Activity>();
+            				activities = new ArrayList<Long>();
             			}
-            			activities.add(activity);
-            			System.out.println("Total activities for user " + activities.size());
-            			userDao.create(user);
-            			activityDao.create(activity);
+            			activity = activityDao.create(activity);
+            			System.out.println("activity saved");
+            			activities.add(activity.getId());
+            			user.setActivities(activities);
+            			userDao.update(user);
+            			System.out.println("user updated");
             		}
-            		System.out.println("Activity id " + activity.getId());
 	            	return new ModelAndView("file_uploaded" , "fileContent", activity);
             	}else{
             		log.severe("cannot create activity...");

@@ -82,7 +82,7 @@
 			<option value="Other">Other</option>
 		</select><br/>
 		<input type="submit" value="Save" />
-		<input type="hidden" name="activityId" value="${activity.id.id}"/>
+		<input type="hidden" name="activityId" value="${activity.id}"/>
 	</form>
 
 

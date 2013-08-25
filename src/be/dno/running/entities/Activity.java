@@ -20,7 +20,10 @@ public class Activity implements Serializable {
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Key id;
+	private Long id;
+	
+	@Persistent
+	private String userId;
 	
 	@Persistent
 	private String name;
@@ -87,6 +90,7 @@ public class Activity implements Serializable {
 	
 	public Activity(String userId) {
 		super();
+		this.userId = userId;
 		this.laps = new ArrayList<Lap>();
 		this.lapsBySameDistance = new ArrayList<Lap>();
 		this.lapsBySameTime = new ArrayList<Lap>();
@@ -96,7 +100,7 @@ public class Activity implements Serializable {
 		super();
 	}
 
-	public Key getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -249,8 +253,13 @@ public class Activity implements Serializable {
 	public void setTotalTime(long totalTime) {
 		this.totalTime = totalTime;
 	}
-	
-	
-	
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	
 }

@@ -15,7 +15,7 @@ public class User implements Serializable{
 	
 	@PrimaryKey
 	@Persistent
-	private String userID;
+	private String id;
 	
 	@Persistent
 	private String googleUserName;
@@ -60,7 +60,7 @@ public class User implements Serializable{
 	private List<Record> records;*/
 	
 	@Persistent
-	private List<Activity> activities;
+	private List<Long> activities;
 	
 	/*private double cuisse;
 	
@@ -77,17 +77,17 @@ public class User implements Serializable{
 		super();
 	}
 	
-	public List<Activity> getActivities() {
+	public List<Long> getActivities() {
 		return activities;
 	}
-	public void setActivities(List<Activity> activities) {
+	public void setActivities(List<Long> activities) {
 		this.activities = activities;
 	}
-	public String getUserID() {
-		return userID;
+	public String getId() {
+		return id;
 	}
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getGoogleUserName() {
 		return googleUserName;
@@ -107,7 +107,7 @@ public class User implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "User [userID=" + userID + ", googleUserName=" + googleUserName
+		return "User [userID=" + id + ", googleUserName=" + googleUserName
 				+ "]";
 	}
 	
