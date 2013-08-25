@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.mortbay.log.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,8 +20,6 @@ import be.dno.running.helper.JspHelper;
 import be.dno.running.persistence.GenericDao;
 import be.dno.running.xml.XmlToJavaConverter;
 
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -37,23 +34,19 @@ public class UploadController {
 		String isPrivate = request.getParameter("private");
 		String type = request.getParameter("type");
 		
-		Log.debug("activityID : " + activityID);
-		Log.debug("isPrivate : " + isPrivate);
-		Log.debug("activtypeityID : " + type);
-		
-		
 		UserService userService = UserServiceFactory.getUserService();
 		String userID = userService.getCurrentUser().getUserId();
 	
 		GenericDao<User> userDao = new GenericDao<User>(User.class);
-		
-		//TODO...
+		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class); 
 		User user = userDao.getById(userID);
 		Activity activity = null;
-		List<Activity> activities = user.getActivities();
+		List<Activity> activities = new ArrayList<Activity>();
+		for(Long activityId : user.getActivityIds()){
+			activities.add(activityDao.getById(activityId));
+		}
 		for(final Activity tactivity : activities){
-			Log.debug(tactivity.getId().getId() +"=="+ Long.parseLong(activityID) + " -> " + (tactivity.getId().getId() == Long.parseLong(activityID)));
-			if (tactivity.getId().getId() == Long.parseLong(activityID)){
+			if (tactivity.getId().longValue() == Long.parseLong(activityID)){
 				activity = tactivity;
 			}
 		}
@@ -67,6 +60,12 @@ public class UploadController {
 			log.severe("Err: Activity is null");
 		}
 		return new ModelAndView("home");
+	}
+	
+	
+	@RequestMapping(value = "/upload_activity", method = RequestMethod.GET)
+	public ModelAndView postUploadRedirect(MultiPartFileUpload upload, HttpServletRequest request) {
+		return new ModelAndView("upload_activity");
 	}
 	
 	@RequestMapping(value = "/upload_activity", method = RequestMethod.POST)
@@ -109,17 +108,16 @@ public class UploadController {
             		log.fine("Attempting to add activity into user in datastore");
             		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
             		
+            		
             		if (userService.getCurrentUser() != null){
             			log.fine("User is still connected");
-            			List<Activity> activities = user.getActivities();
-            			if (activities == null){
-            				System.out.println("Creating empty list of activity");
-            				activities = new ArrayList<Activity>();
+            			activity.setUserName(userService.getCurrentUser().getNickname());
+            			activity = activityDao.create(activity);
+            			if (user.getActivityIds() == null){
+            				user.setActivityIds(new ArrayList<Long>());
             			}
-            			activities.add(activity);
-            			System.out.println("Total activities for user " + activities.size());
+            			user.getActivityIds().add(activity.getId());
             			userDao.create(user);
-            			activityDao.create(activity);
             		}
             		System.out.println("Activity id " + activity.getId());
 	            	return new ModelAndView("file_uploaded" , "fileContent", activity);

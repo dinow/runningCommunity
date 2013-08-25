@@ -20,7 +20,11 @@ import java.io.Serializable;
  * @author rgallet
  */
 public class Point implements Serializable {
-    //decimal degrees
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6713069566803574934L;
+	//decimal degrees
     double latitude, longitude;
 
     public Point(Coordinate latitude, Coordinate longitude) {

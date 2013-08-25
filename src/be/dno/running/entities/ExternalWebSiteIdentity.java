@@ -1,23 +1,30 @@
 package be.dno.running.entities;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.api.datastore.Key;
-
+@PersistenceCapable
 public class ExternalWebSiteIdentity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Key id;
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.SEQUENCE)
+	private Long id;
 	
-	private ExternalWebSite externalWebSite;
+	@Persistent
+	private Long externalWebSiteId;
+	
+	@Persistent
 	private String externalID;
-	public ExternalWebSite getExternalWebSite() {
-		return externalWebSite;
+	
+	public Long getExternalWebSiteId() {
+		return externalWebSiteId;
 	}
-	public void setExternalWebSite(ExternalWebSite externalWebSite) {
-		this.externalWebSite = externalWebSite;
+	public void setExternalWebSiteId(Long externalWebSiteId) {
+		this.externalWebSiteId = externalWebSiteId;
+	}
+	public Long getId() {
+		return id;
 	}
 	public String getExternalID() {
 		return externalID;

@@ -1,7 +1,6 @@
 package be.dno.running.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -60,7 +59,7 @@ public class User implements Serializable{
 	private List<Record> records;*/
 	
 	@Persistent
-	private List<Activity> activities;
+	private List<Long> activityIds;
 	
 	/*private double cuisse;
 	
@@ -77,12 +76,15 @@ public class User implements Serializable{
 		super();
 	}
 	
-	public List<Activity> getActivities() {
-		return activities;
+	
+	public List<Long> getActivityIds() {
+		return activityIds;
 	}
-	public void setActivities(List<Activity> activities) {
-		this.activities = activities;
+
+	public void setActivityIds(List<Long> activityIds) {
+		this.activityIds = activityIds;
 	}
+
 	public String getUserID() {
 		return userID;
 	}

@@ -1,5 +1,6 @@
 package be.dno.running.persistence;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.jdo.JDOObjectNotFoundException;
@@ -27,17 +28,9 @@ public class GenericDao <T>{
 		pm.refresh(o);
 	}
 
-	public T getById(String id){
+	public T getById(Serializable id){
 		try{
 			return pm.getObjectById(type, id);
-		}catch(JDOObjectNotFoundException nfound){
-			return null;
-		}
-	}
-	
-	public T getById(Key key){
-		try{
-			return pm.getObjectById(type, key);
 		}catch(JDOObjectNotFoundException nfound){
 			return null;
 		}

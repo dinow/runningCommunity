@@ -1,7 +1,7 @@
 package be.dno.running.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -11,16 +11,17 @@ import javax.jdo.annotations.PrimaryKey;
 
 import be.dno.running.helper.ConvertHelper;
 
-import com.google.appengine.api.datastore.Key;
-
 @PersistenceCapable
 public class Activity implements Serializable {
 	
 	private static final long serialVersionUID = -4239127223646826296L;
 
 	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Key id;
+	@Persistent(valueStrategy = IdGeneratorStrategy.SEQUENCE)
+	private Long id;
+	
+	@Persistent
+	private String userName;
 	
 	@Persistent
 	private String name;
@@ -29,7 +30,7 @@ public class Activity implements Serializable {
 	private String description;
 	
 	@Persistent
-	private String dateDebut;
+	private Date dateDebut;
 	
 	@Persistent
 	private String pace;
@@ -38,7 +39,16 @@ public class Activity implements Serializable {
 	private double speed;
 	
 	@Persistent
-	private List<Lap> laps = new ArrayList<Lap>();
+	private List<Lap> laps;
+	
+	@Persistent
+	private List<Lap> lapsBySameDistance;
+	
+	@Persistent
+	private List<Lap> lapsBySameTime;
+	
+	@Persistent
+	private List<Lap> lapsBySplitDistance;
 	
 	@Persistent
 	private long totalTime = -1;
@@ -57,12 +67,6 @@ public class Activity implements Serializable {
 	
 	@Persistent
 	private double totalDistance = -1;	
-	
-	@Persistent
-	private List<Lap> lapsBySameDistance = null;
-	
-	@Persistent
-	private List<Lap> lapsBySameTime = null;
 	
 	@Persistent
 	private double averageSecondForLapsBySameDistance = -1;
@@ -87,17 +91,10 @@ public class Activity implements Serializable {
 	
 	public Activity(String userId) {
 		super();
-		this.laps = new ArrayList<Lap>();
-		this.lapsBySameDistance = new ArrayList<Lap>();
-		this.lapsBySameTime = new ArrayList<Lap>();
 	}
 	
 	public Activity() {
 		super();
-	}
-
-	public Key getId() {
-		return id;
 	}
 
 	public boolean isActivityPrivate() {
@@ -128,10 +125,15 @@ public class Activity implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getDateDebut() {
+	public Date getDateDebut() {
 		return dateDebut;
 	}
-	public void setDateDebut(String dateDebut) {
+	
+	public String getStrDateDebut() {
+		return ConvertHelper.dateToString(dateDebut);
+	}
+	
+	public void setDateDebut(Date dateDebut) {
 		this.dateDebut = dateDebut;
 	}
 	
@@ -148,12 +150,6 @@ public class Activity implements Serializable {
 		this.speed = speed;
 	}
 	
-	public List<Lap> getLaps() {
-		return laps == null ? new ArrayList<Lap>() : laps;
-	}
-	public void setLaps(List<Lap> laps) {
-		this.laps = laps;
-	}
 	public double getTotalTime() {
 		return totalTime;
 	}
@@ -194,19 +190,6 @@ public class Activity implements Serializable {
 	}
 	public void setTotalDistance(double totalDistance) {
 		this.totalDistance = totalDistance;
-	}
-	
-	public List<Lap> getLapsBySameDistance() {
-		return lapsBySameDistance == null ? new ArrayList<Lap>() : lapsBySameDistance;
-	}
-	public void setLapsBySameDistance(List<Lap> lapsBySameDistance) {
-		this.lapsBySameDistance = lapsBySameDistance;
-	}
-	public List<Lap> getLapsBySameTime() {
-		return lapsBySameTime == null ? new ArrayList<Lap>() : lapsBySameTime;
-	}
-	public void setLapsBySameTime(List<Lap> lapsBySameTime) {
-		this.lapsBySameTime = lapsBySameTime;
 	}
 	public double getAverageSecondForLapsBySameDistance() {
 		return averageSecondForLapsBySameDistance;
@@ -249,8 +232,49 @@ public class Activity implements Serializable {
 	public void setTotalTime(long totalTime) {
 		this.totalTime = totalTime;
 	}
-	
-	
-	
+
+	public Long getId() {
+		return id;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public List<Lap> getLaps() {
+		return laps;
+	}
+
+	public void setLaps(List<Lap> laps) {
+		this.laps = laps;
+	}
+
+	public List<Lap> getLapsBySameDistance() {
+		return lapsBySameDistance;
+	}
+
+	public void setLapsBySameDistance(List<Lap> lapsBySameDistance) {
+		this.lapsBySameDistance = lapsBySameDistance;
+	}
+
+	public List<Lap> getLapsBySameTime() {
+		return lapsBySameTime;
+	}
+
+	public void setLapsBySameTime(List<Lap> lapsBySameTime) {
+		this.lapsBySameTime = lapsBySameTime;
+	}
+
+	public List<Lap> getLapsBySplitDistance() {
+		return lapsBySplitDistance;
+	}
+
+	public void setLapsBySplitDistance(List<Lap> lapsBySplitDistance) {
+		this.lapsBySplitDistance = lapsBySplitDistance;
+	}
 	
 }
