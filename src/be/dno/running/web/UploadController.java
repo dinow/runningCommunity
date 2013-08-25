@@ -40,9 +40,6 @@ public class UploadController {
 	
 		GenericDao<User> userDao = new GenericDao<User>(User.class);
 		
-		System.out.println("updateActivity, input parameters \""+activityID+"\", \"" + userID + "\"");
-		System.out.println("updateActivity, input parameters \""+isPrivate+"\", \"" + type + "\"");
-		
 		//TODO...
 		User user = userDao.getById(userID);
 		Activity activity = null;
@@ -55,11 +52,11 @@ public class UploadController {
 		
 		
 		if(activity != null){
-			activity.setActivityPrivate(!isPrivate.equalsIgnoreCase("null"));
+			activity.setActivityPrivate(null != isPrivate);
 			activity.setActivityCategory(type);
 			userDao.update(user);
 		}else{
-			System.out.println("Err: Activity is null");
+			log.severe("Err: Activity is null");
 		}
 		return new ModelAndView("home");
 	}

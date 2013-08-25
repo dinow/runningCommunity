@@ -30,7 +30,7 @@ public class ShowActivitiesController {
 		GenericDao<User> userDao = new GenericDao<User>(User.class); 
 		User currentUser = userDao.getById(userService.getCurrentUser().getUserId());
 		
-		System.out.println("activities: " + currentUser.getActivities());
+		log.info("activities: " + currentUser.getActivities());
 		return new ModelAndView("show_activities" , "activities", currentUser.getActivities());
 	}
 	
