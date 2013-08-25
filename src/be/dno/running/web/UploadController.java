@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.mortbay.log.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +36,12 @@ public class UploadController {
 		String activityID = JspHelper.htmlDecode(request.getParameter("activityId"));
 		String isPrivate = request.getParameter("private");
 		String type = request.getParameter("type");
+		
+		Log.debug("activityID : " + activityID);
+		Log.debug("isPrivate : " + isPrivate);
+		Log.debug("activtypeityID : " + type);
+		
+		
 		UserService userService = UserServiceFactory.getUserService();
 		String userID = userService.getCurrentUser().getUserId();
 	
@@ -45,6 +52,7 @@ public class UploadController {
 		Activity activity = null;
 		List<Activity> activities = user.getActivities();
 		for(final Activity tactivity : activities){
+			Log.debug(tactivity.getId().getId() +"=="+ Long.parseLong(activityID) + " -> " + (tactivity.getId().getId() == Long.parseLong(activityID)));
 			if (tactivity.getId().getId() == Long.parseLong(activityID)){
 				activity = tactivity;
 			}
