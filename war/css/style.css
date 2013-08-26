@@ -22,7 +22,7 @@ span.loggedUser{
 
 div.headerDiv{
 	width:100%; 
-	background-color: #cdcdcd; 
+	background-color: #F5E1C2; 
 	height: 30px; 
 	padding-top: 10px;
 	position: fixed;
@@ -35,6 +35,7 @@ div.mainPage{
 	width: 100%;
 	padding-left: 40px;
 	padding-right: 40px;
+	background-color: #FBF9F5; 
 }
 
 tr.lapNeutral{
