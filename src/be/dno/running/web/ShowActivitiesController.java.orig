@@ -35,9 +35,6 @@ public class ShowActivitiesController {
 		User currentUser = userDao.getById(userService.getCurrentUser().getUserId());
 		
 		List<Activity> activities = new ArrayList<Activity>();
-		if (currentUser == null){
-			return new ModelAndView("show_activities" , "activities", activities);
-		}
 		for(Long activityId : currentUser.getActivityIds()){
 			activities.add(activityDao.getById(activityId));
 		}
