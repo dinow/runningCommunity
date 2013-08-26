@@ -24,17 +24,22 @@ public class GenericDao <T>{
 		return pm.makePersistent(o);
 	}
 	
+	public void delete(Serializable id){
+		pm.deletePersistent(this.getById(id));
+		pm.flush();
+	}
+	
 	public void update(T o) {
 		pm.refresh(o);
 	}
 	
-	public T getById(Long id){
+	/*public T getById(Long id){
 		try{
 			return pm.getObjectById(type, id);
 		}catch(JDOObjectNotFoundException nfound){
 			return null;
 		}
-	}
+	}*/
 
 	public T getById(Serializable id){
 		try{

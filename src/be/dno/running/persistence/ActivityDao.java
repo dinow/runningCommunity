@@ -1,5 +1,6 @@
 package be.dno.running.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -16,6 +17,7 @@ public class ActivityDao {
 		q.setFilter("activityPrivate == false");
 		List<Activity> results = (List) q.execute();
 		q.closeAll();
+		if (results == null) results = new ArrayList<Activity>();
 		return results;
 	}
 	

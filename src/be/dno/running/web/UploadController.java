@@ -1,7 +1,7 @@
 package be.dno.running.web;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +16,6 @@ import be.dno.running.entities.User;
 import be.dno.running.entities.xml.garmin.gpx.Gpx;
 import be.dno.running.entities.xml.garmin.tcx.TcxTrainingCenterDatabase;
 import be.dno.running.factories.ActivityFactory;
-import be.dno.running.helper.JspHelper;
 import be.dno.running.persistence.GenericDao;
 import be.dno.running.xml.XmlToJavaConverter;
 
@@ -27,6 +26,23 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 public class UploadController {
 	private static final Logger log = Logger.getLogger(UploadController.class.getName());
+	
+	
+	@RequestMapping(value = "/deleteActivity", method = RequestMethod.POST)
+	public ModelAndView deleteActivity(HttpServletRequest request) {
+		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class); 
+		Long activityId = Long.parseLong(request.getParameter("activityId"));
+		GenericDao<User> userDao = new GenericDao<User>(User.class);
+		UserService userService = UserServiceFactory.getUserService();
+		String userID = userService.getCurrentUser().getUserId();
+		User user = userDao.getById(userID);
+		if (user != null){
+			user.getActivityIds().remove(activityId);
+			userDao.update(user);
+		}
+		activityDao.delete(activityId);
+		return new ModelAndView("show_activities");
+	}
 	
 	@RequestMapping(value = "/saveAction", method = RequestMethod.POST)
 	public ModelAndView updateActivity(HttpServletRequest request) {
@@ -55,7 +71,7 @@ public class UploadController {
 		}else{
 			log.severe("Err: Activity is null");
 		}
-		return new ModelAndView("home");
+		return new ModelAndView("show_activities");
 	}
 	
 	
@@ -63,6 +79,8 @@ public class UploadController {
 	public ModelAndView postUploadRedirect(MultiPartFileUpload upload, HttpServletRequest request) {
 		return new ModelAndView("upload_activity");
 	}
+	
+	
 	
 	@RequestMapping(value = "/upload_activity", method = RequestMethod.POST)
 	public ModelAndView postUpload(MultiPartFileUpload upload, HttpServletRequest request) {
@@ -108,6 +126,7 @@ public class UploadController {
             		if (userService.getCurrentUser() != null){
             			log.fine("User is still connected");
             			activity.setUserName(userService.getCurrentUser().getNickname());
+            			activity.setUploadDate(new Date());
             			activity = activityDao.create(activity);
             			if (user.getActivityIds() == null){
             				user.setActivityIds(new ArrayList<Long>());
@@ -115,7 +134,7 @@ public class UploadController {
             			user.getActivityIds().add(activity.getId());
             			userDao.update(user); //update ici car le create écrase un user existant
             		}
-            		System.out.println("Activity id " + activity.getId());
+            		//System.out.println("Activity id " + activity.getId());
 	            	return new ModelAndView("file_uploaded" , "fileContent", activity);
             	}else{
             		log.severe("cannot create activity...");

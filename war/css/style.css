@@ -8,6 +8,7 @@ body,p,a,span,h1,h2,h3,td,th,div {
 
 body {
 	margin: 0px;
+	background-color: #FBF9F5; 
 }
 
 a:VISITED, a:HOVER, a:ACTIVE, a:LINK{
@@ -28,6 +29,7 @@ div.headerDiv{
 	position: fixed;
 	top: 0px;
 	left: 0px;
+	padding-left: 40px;
 }
 
 div.mainPage{
@@ -35,7 +37,6 @@ div.mainPage{
 	width: 100%;
 	padding-left: 40px;
 	padding-right: 40px;
-	background-color: #FBF9F5; 
 }
 
 tr.lapNeutral{

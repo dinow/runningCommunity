@@ -30,13 +30,11 @@ public class GpxMetadata {
 	public GpxAuthor getAuthor() {
 		return author;
 	}
-	@Override
-	public String toString() {
-		return "GpxMetadata [link=" + link + ", author=" + author + ", time="
-				+ time + ", name=" + name + ", bounds=" + bounds + "]";
+	
+	public String getName() {
+		return name == null ? "" : name;
 	}
-	
-	
-	
-	
+	public String getBounds() {
+		return bounds;
+	}
 }

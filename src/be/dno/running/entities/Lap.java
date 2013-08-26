@@ -22,6 +22,9 @@ public class Lap implements Serializable {
 	private Key id;
 	
 	@Persistent
+	private int number;
+	
+	@Persistent
 	private Date startTime;
 	
 	@Persistent
@@ -83,6 +86,14 @@ public class Lap implements Serializable {
 	}
 
 
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
 
 	public void setTimeDiffAverageActivity(String timeDiffAverageActivity) {
 		this.timeDiffAverageActivity = timeDiffAverageActivity;

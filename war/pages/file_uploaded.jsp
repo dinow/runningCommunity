@@ -16,7 +16,7 @@
 	<tags:activity activity="${activity}"  />
 
 	<h3>Laps bruts</h3>
-	<tags:laps listOfLaps="${activity.laps}"  />
+	<tags:laps listOfLaps="${activity.laps}" detailedView="${false }"  />
 
 	<br /> L'activité sera sauvée dans quelques secondes, merci de patienter un tout petit peu... (trop louche...)
 	<form action="/saveAction.do" method="post">
@@ -30,7 +30,7 @@
 			<option value="Other">Other</option>
 		</select><br/>
 		Nom de l'activité: <input type="text" name="name"><br/>
-		<input type="submit" value="Save" />
+		<input type="submit" value="Update" />
 		<input type="hidden" name="activityId" value="${activity.id}"/>
 	</form>
 	</div>

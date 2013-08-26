@@ -23,6 +23,9 @@ public class Activity implements Serializable {
 	@Persistent
 	private String userName;
 	
+	@Persistent
+	private Date uploadDate;
+	
 	@Persistent 
 	String userId;
 	
@@ -97,6 +100,14 @@ public class Activity implements Serializable {
 		this.userId = userId;
 	}
 	
+	public Date getUploadDate() {
+		return uploadDate;
+	}
+
+	public void setUploadDate(Date uploadDate) {
+		this.uploadDate = uploadDate;
+	}
+
 	public Activity() {
 		super();
 	}

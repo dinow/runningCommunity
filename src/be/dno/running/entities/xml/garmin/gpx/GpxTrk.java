@@ -27,7 +27,7 @@ public class GpxTrk {
 	private GpxLink link;
 	
 	public String getName() {
-		return name;
+		return name == null ? "" : name;
 	}
 	
 	public List<GpxTrkseg> getTrkseg() {
@@ -35,17 +35,17 @@ public class GpxTrk {
 	}
 
 	public String getType() {
-		return type;
+		return type == null ? "" : type;
 	}
 	public String getSrc() {
-		return src;
+		return src == null ? "" : src;
 	}
 	public GpxLink getLink() {
 		return link;
 	}
 
 	public String getDesc() {
-		return desc;
+		return desc == null ? "" : desc;
 	}
 	
 }

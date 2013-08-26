@@ -6,56 +6,52 @@
 	<tr>
 		<th colspan="2">Informations sur l'activité</th>
 	</tr>
-	<tr>
+	<%--<tr>
 		<th>id</th>
 		<td>${activity.id}</td>
-	</tr>
+	</tr> --%>
 	<tr>
-		<th>name</th>
+		<th>Nom</th>
 		<td>${activity.name }</td>
 	</tr>
 	<tr>
-		<th>description</th>
+		<th>Description</th>
 		<td>${activity.description }</td>
 	</tr>
 	<tr>
-		<th>dateDebut</th>
+		<th>Date</th>
 		<td>${activity.strDateDebut}</td>
 	</tr>
 	<tr>
-		<th>totalDistance</th>
+		<th>Distance</th>
 		<td>${activity.totalDistance }</td>
 	</tr>
 	<tr>
-		<th>pace</th>
+		<th>Allure moyenne</th>
 		<td>${activity.pace }</td>
 	</tr>
 	<tr>
-		<th>speed</th>
+		<th>Vitesse moyenne</th>
 		<td>${activity.speed }</td>
 	</tr>
 	<tr>
-		<th>totalTime</th>
+		<th>Temps total</th>
 		<td>${activity.totalTimeStr }</td>
 	</tr>
 	<tr>
-		<th>totalTime (seconds)</th>
-		<td>${activity.totalTime }</td>
-	</tr>
-	<tr>
-		<th>averageBpm</th>
+		<th>BPM Moyen</th>
 		<td>${activity.averageBpm }</td>
 	</tr>
 	<tr>
-		<th>maxBpm</th>
+		<th>BPM Max.</th>
 		<td>${activity.maxBpm }</td>
 	</tr>
 	<tr>
-		<th>elevationPositive</th>
+		<th>Elevation</th>
 		<td>${activity.elevationPositive }</td>
 	</tr>
 	<tr>
-		<th>totalCalories</th>
+		<th>Calories</th>
 		<td>${activity.totalCalories }</td>
 	</tr>
 

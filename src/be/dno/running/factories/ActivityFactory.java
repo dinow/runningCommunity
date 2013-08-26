@@ -125,8 +125,6 @@ public class ActivityFactory {
 		double totalTime =  0.0;
 		List<Lap> lapsBySameDistance = new ArrayList<Lap>();
 		Map<Double, List<Lap>> mapByDistance = new HashMap<Double, List<Lap>>();
-		
-		
 		List<Lap> lapsBySameTime = new ArrayList<Lap>();
 		Map<Double, List<Lap>> mapByTime = new HashMap<Double, List<Lap>>();
 		
@@ -187,16 +185,22 @@ public class ActivityFactory {
 				lapsBySameTime.addAll(listLap);
 			}
 		}
-		
+	
+		int number = 1;
 		double averageSecondForLapsBySameDistance = 0.0;
 		for (Lap lap : lapsBySameDistance){
+			lap.setNumber(number++);
 			averageSecondForLapsBySameDistance += lap.getTotalTimeSeconds();
 		}
 		averageSecondForLapsBySameDistance /= lapsBySameDistance.size();
 		
 		double averageDistanceForLapsBySameTime = 0.0;
+		double averageSpeed = 0.0;
+		number = 1;
 		for (Lap lap : lapsBySameTime){
+			lap.setNumber(number++);
 			averageDistanceForLapsBySameTime += lap.getDistanceMeters();
+			averageSpeed += lap.getSpeed();
 		}
 		averageDistanceForLapsBySameTime /= lapsBySameTime.size();
 		
@@ -204,11 +208,6 @@ public class ActivityFactory {
 			averageBpm /= cptLapWithBPM;
 		}else{
 			averageBpm = 0;
-		}
-		
-		double averageSpeed = 0.0;
-		for (Lap lap : lapsBySameTime){
-			averageSpeed += lap.getSpeed();
 		}
 		averageSpeed /= lapsBySameTime.size();
 		
@@ -261,20 +260,20 @@ public class ActivityFactory {
 	
 	public static Activity buildActivity(TcxTrainingCenterDatabase tcd, String userId){
 		Activity activity = new Activity(userId);
-		TcxAuthor author = tcd.getAuthor();
-		TcxCreator creator = tcd.getActivities().getActivity().getCreator();
-		String description = author != null ? author.toString() : "";
-		try{
-			description += "</br>Sport: " + tcd.getActivities().getActivity().getSport();
-		}catch(Exception ex){
-			
-		}
-		try{
-			description += "</br>Creator: " + creator != null ? creator.toString() : "";
-		}catch(Exception ex){
-			
-		}
+		//TcxAuthor author = tcd.getAuthor();
+		//TcxCreator creator = tcd.getActivities().getActivity().getCreator();
 		
+		/**
+		 * I smooth run pro, Garmin : <Activity Sport="Running"><Id>2013-08-15T07:00:59Z</Id>
+		 * 
+		 */
+		
+		String description = "";
+		try{
+			description += "Sport: " + tcd.getActivities().getActivity().getSport()+"<br/>";
+		}catch(Exception ex){
+			
+		}
 		activity.setDescription(description);
 		final List<TcxLap> laps = tcd.getActivities().getActivity().getLaps();
 		
@@ -306,8 +305,11 @@ public class ActivityFactory {
 		activity.setPace(ConvertHelper.toPace(Double.valueOf(secondsforonekilo).longValue()));
 		
 		List<Lap> intLap = new ArrayList<Lap>();
+		int number = 1;
 		for (TcxLap lap : laps){
-			intLap.add(LapFactory.buildLap(lap,activity.getSpeed()));
+			Lap currentLap = LapFactory.buildLap(lap,activity.getSpeed());
+			currentLap.setNumber(number++);
+			intLap.add(currentLap);
 		}
 		activity.setLaps(intLap);	
 		
@@ -317,10 +319,17 @@ public class ActivityFactory {
 	public static Activity buildActivity(Gpx gpx, String userId){
 		Activity activity = new Activity(userId);
 		
-		String description = gpx.getMetadata().toString();
-		description += "</br>" + gpx.getTrk().getName();
+		String metadataName = gpx.getMetadata().getName();
+		String descName = gpx.getTrk().getName();
+		String description = gpx.getTrk().getDesc();
+		if (!descName.isEmpty() && !descName.equals("null")){
+			metadataName+= "<br/>"+descName;
+		}
+		if (!description.isEmpty() && !description.equals("null")){
+			metadataName+= "<br/>"+description;
+		}
 		
-		activity.setDescription(description);
+		activity.setDescription(metadataName);
 		List<GpxTrkseg> trkSegs = gpx.getTrk().getTrkseg();
 		List<GpxTrkpt> trckPoints = new ArrayList<GpxTrkpt>();
 		for (GpxTrkseg trkSeg : trkSegs){
@@ -395,12 +404,12 @@ public class ActivityFactory {
 			}
 		}
 		
-		for (String key : returnMap.keySet()){
+		/*for (String key : returnMap.keySet()){
 			System.out.println("KEY : " + key);
 			for (Lap lap : returnMap.get(key)){
 				System.out.println(lap);
 			}
-		} 
+		} */
 		
 		return returnMap;
 	}
