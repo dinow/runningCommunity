@@ -47,6 +47,14 @@ public class Challenge {
 		this.creatorId = creatorId;
 	}
 	
+	public String getCriteria() {
+		return criteria;
+	}
+
+	public void setCriteria(String criteria) {
+		this.criteria = criteria;
+	}
+
 	public String getName() {
 		return name;
 	}

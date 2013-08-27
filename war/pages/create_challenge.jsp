@@ -11,12 +11,14 @@
 		<%@ include file="header.jsp"%>
 		<div class="mainPage">
 		<h3>Créer un nouveau challenge</h3>
-		<form action="/createChallenge.do" method="post">
+		<form action="/createChallenge.do" method="post"> <!-- TODO: Checker javascript -->
 			Nom: <input type="text" name="name"><br/>
 			Date de début: <input type="date" name="startDate"/> <br/> 
 			Date de fin: <input type="date" name="endDate"/> <br/> 
 			Distance à parcourir: <input type="text" name="distance">Km<br/>
 			Dénivelé minimum: <input type="text" name="elevation">m<br/>
+			Temps minimum: <input type="text" name="time">sec.<br/>
+			Type de comparaison: <select name="Comptype"><option>Moins que</option><option>Plus que</option></select><br/>
 			<input type="submit" value="Save" />
 		</form>
 		</div>

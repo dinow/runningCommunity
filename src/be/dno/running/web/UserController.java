@@ -12,13 +12,11 @@ public class UserController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView login(HttpServletRequest request) {
-		
 		return new ModelAndView();
 	}
 	
 	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
 	public ModelAndView editUser(HttpServletRequest request) {
-		
 		return new ModelAndView();
 	}
 	
