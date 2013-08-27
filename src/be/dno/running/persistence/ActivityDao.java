@@ -20,7 +20,4 @@ public class ActivityDao {
 		if (results == null) results = new ArrayList<Activity>();
 		return results;
 	}
-	
-	
-	
 }

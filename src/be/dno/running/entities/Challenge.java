@@ -1,6 +1,7 @@
 package be.dno.running.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -29,11 +30,17 @@ public class Challenge {
 	@Persistent
 	private double elevation;
 	
+	@Persistent 
+	private int seconds; //En plus de la distance, style faire sub 40 :o
+	
+	@Persistent
+	private String criteria; //Style "plus de", "moins de", "au moins", "au plus", faire une liste
+	
 	@Persistent
 	private String creatorId;
 	
-	// @Persistent
-	//private List<Long> badgeIds;
+	@Persistent
+	private List<Long> badgeIds;
 	
 	public Challenge(String creatorId){
 		super();
@@ -47,13 +54,25 @@ public class Challenge {
 		this.name = name;
 	}
 	
-	//public List<Long> getBadgeIds() {
-	//	return badgeIds;
-	//}
-	//public void setBadgeIds(List<Long> badgeIds) {
-	//	this.badgeIds = badgeIds;
-	//}
+	public List<Long> getBadgeIds() {
+		return badgeIds;
+	}
+	public void setBadgeIds(List<Long> badgeIds) {
+		this.badgeIds = badgeIds;
+	}
 	
+	public int getSeconds() {
+		return seconds;
+	}
+
+	public void setSeconds(int seconds) {
+		this.seconds = seconds;
+	}
+
+	public String getCreatorId() {
+		return creatorId;
+	}
+
 	public Long getId() {
 		return id;
 	}

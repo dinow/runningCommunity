@@ -43,10 +43,10 @@ tr.lapNeutral{
 	background-color: #efefef;
 }
 
-tr.lapPositive{
+tr.lapNegative{
 	background-color: #aa0000;
 }
 
-tr.lapNegative{
+tr.lapPositive{
 	background-color: #00aa00;
 }

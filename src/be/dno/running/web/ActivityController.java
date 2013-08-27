@@ -2,6 +2,7 @@ package be.dno.running.web;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import be.dno.running.entities.User;
 import be.dno.running.entities.xml.garmin.gpx.Gpx;
 import be.dno.running.entities.xml.garmin.tcx.TcxTrainingCenterDatabase;
 import be.dno.running.factories.ActivityFactory;
+import be.dno.running.persistence.ActivityDao;
 import be.dno.running.persistence.GenericDao;
 import be.dno.running.xml.XmlToJavaConverter;
 
@@ -23,28 +25,58 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 @Controller
-
-public class UploadController {
-	private static final Logger log = Logger.getLogger(UploadController.class.getName());
+public class ActivityController {
 	
+	private static final Logger log = Logger.getLogger(ActivityController.class.getName());
+	private static GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class); 
+	private static GenericDao<User> userDao = new GenericDao<User>(User.class);
 	
 	@RequestMapping(value = "/deleteActivity", method = RequestMethod.POST)
 	public ModelAndView deleteActivity(HttpServletRequest request) {
-		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class); 
 		Long activityId = Long.parseLong(request.getParameter("activityId"));
 		GenericDao<User> userDao = new GenericDao<User>(User.class);
 		UserService userService = UserServiceFactory.getUserService();
 		String userID = userService.getCurrentUser().getUserId();
 		User user = userDao.getById(userID);
 		if (user != null){
+			System.out.println("removing activity with id " + activityId);
+			System.out.println("Before : " + user.getActivityIds());
 			user.getActivityIds().remove(activityId);
+			System.out.println("After : " + user.getActivityIds());
 			userDao.update(user);
 		}
 		activityDao.delete(activityId);
 		return new ModelAndView("show_activities");
 	}
 	
-	@RequestMapping(value = "/saveAction", method = RequestMethod.POST)
+	@RequestMapping(value = "/show_my_activities", method = RequestMethod.GET)
+	public ModelAndView showActivities(HttpServletRequest request) {
+		UserService userService = UserServiceFactory.getUserService();
+		if(userService.getCurrentUser() == null){
+			log.warning("Not logged in user tried to access show_activities page...");
+			return new ModelAndView("fail","message","Unknown user");
+		}
+		User currentUser = userDao.getById(userService.getCurrentUser().getUserId());
+		
+		List<Activity> activities = new ArrayList<Activity>();
+		if (currentUser == null){
+			return new ModelAndView("show_activities" , "activities", activities);
+		}
+		for(Long activityId : currentUser.getActivityIds()){
+			activities.add(activityDao.getById(activityId));
+		}
+		
+		log.info("activities: " + activities);
+		return new ModelAndView("show_activities" , "activities", activities);
+	}
+	
+	@RequestMapping(value = "/show_others_activities", method = RequestMethod.GET)
+	public ModelAndView showOtherActivities(HttpServletRequest request) {
+		ActivityDao adao = new ActivityDao();
+		return new ModelAndView("show_others_activities","activities",adao.getPublicActivities());
+	}
+	
+	@RequestMapping(value = "/saveActivity", method = RequestMethod.POST)
 	public ModelAndView updateActivity(HttpServletRequest request) {
 		Long activityID = Long.parseLong(request.getParameter("activityId"));
 		String isPrivate = request.getParameter("private");
@@ -54,7 +86,6 @@ public class UploadController {
 		UserService userService = UserServiceFactory.getUserService();
 		String userID = userService.getCurrentUser().getUserId();
 	
-		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class); 
 		Activity activity = activityDao.getById(activityID); //pas nécessaire de boucler
 		
 		if(activity != null){
@@ -86,7 +117,6 @@ public class UploadController {
 	public ModelAndView postUpload(MultiPartFileUpload upload, HttpServletRequest request) {
 		UserService userService = UserServiceFactory.getUserService();
 		String userID = userService.getCurrentUser().getUserId();
-		GenericDao<User> userDao = new GenericDao<User>(User.class);
 		User user = userDao.getById(userID);
 		if (user == null){
 			log.fine("User is new, creating...");
@@ -121,7 +151,6 @@ public class UploadController {
             		activity.setActivityCategory("run");
             		activity.setActivityPrivate(false);
             		log.fine("Attempting to add activity into user in datastore");
-            		GenericDao<Activity> activityDao = new GenericDao<Activity>(Activity.class);
             		
             		if (userService.getCurrentUser() != null){
             			log.fine("User is still connected");
@@ -134,7 +163,6 @@ public class UploadController {
             			user.getActivityIds().add(activity.getId());
             			userDao.update(user); //update ici car le create écrase un user existant
             		}
-            		//System.out.println("Activity id " + activity.getId());
 	            	return new ModelAndView("file_uploaded" , "fileContent", activity);
             	}else{
             		log.severe("cannot create activity...");
@@ -160,5 +188,4 @@ public class UploadController {
 		
 		return null;
 	}
-	
 }

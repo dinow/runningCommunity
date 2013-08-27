@@ -26,7 +26,6 @@ public class GenericDao <T>{
 	
 	public void delete(Serializable id){
 		pm.deletePersistent(this.getById(id));
-		pm.flush();
 	}
 	
 	public void update(T o) {
