@@ -21,6 +21,8 @@
 				<li>Polar</li>
 				<li>Endomodo</li>
 			</ul>
+			<br/>
+			Edition utilisateurs, création de challenges (mais non actifs), regroupement des laps par distance / temps
 	</div>
 </body>
 </html>

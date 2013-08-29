@@ -118,21 +118,11 @@ public class ActivityController {
 	public ModelAndView postUpload(MultiPartFileUpload upload, HttpServletRequest request) {
 		UserService userService = UserServiceFactory.getUserService();
 		String userID = userService.getCurrentUser().getUserId();
-		User user = userDao.getById(userID);
-		if (user == null){
-			log.fine("User is new, creating...");
-			user = new User();
-			user.setGoogleUserName(userService.getCurrentUser().getNickname());
-			user.setUserID(userID);
-			userDao.create(user); // On crée le user maintenant, on le modifie après
-		}else{
-			log.fine("User retrieved with id " + user.getUserID());
-		}
-		
 		if (upload.getFile().getSize() != 0) {
             String fileContent = new String(upload.getFile().getBytes());
             Class mainClass = getFileCategory(fileContent);
             if (mainClass != null){
+            	User user = userDao.getById(userID);
             	Object tcd = XmlToJavaConverter.convert(fileContent,mainClass); 
             	
             	Activity activity = null;

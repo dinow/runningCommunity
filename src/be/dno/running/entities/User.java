@@ -1,6 +1,7 @@
 package be.dno.running.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.annotations.PersistenceCapable;
@@ -26,8 +27,6 @@ public class User implements Serializable{
 	/*@ManyToOne(fetch=FetchType.EAGER)
 	private List<ExternalWebSiteIdentity> externalWebSiteIdentities;*/
 	
-	//private String localisation;
-	
 	/*@ManyToOne(fetch=FetchType.EAGER)
 	private List<Challenge> completedChallenges;
 	
@@ -37,9 +36,9 @@ public class User implements Serializable{
 	@ManyToOne(fetch=FetchType.EAGER)
 	private List<Badge> earnedBadges;*/
 	
-	/*private int poids;
+	private double poids;
 	
-	private int poidsSelonMoyenneHFR;
+	private double poidsSelonMoyenneHFR;
 	
 	private double pointure;
 	
@@ -53,7 +52,7 @@ public class User implements Serializable{
 
 	private double IMG;
 	
-	private Date dateNaissance;*/
+	private Date dateNaissance;
 	
 	/*@ManyToOne(fetch=FetchType.EAGER)
 	private List<Record> records;*/
@@ -61,7 +60,7 @@ public class User implements Serializable{
 	@Persistent
 	private List<Long> activityIds;
 	
-	/*private double cuisse;
+	private double cuisse;
 	
 	private double mollet;
 	
@@ -69,7 +68,7 @@ public class User implements Serializable{
 	
 	private int fcMaxReele;
 	
-	private int fcMaxTheorique;*/
+	private int fcMaxTheorique;
 	
 
 	public User() {
@@ -77,6 +76,146 @@ public class User implements Serializable{
 	}
 	
 	
+	public double getPoids() {
+		return poids;
+	}
+
+
+	public void setPoids(double poids) {
+		this.poids = poids;
+	}
+
+
+	public double getPoidsSelonMoyenneHFR() {
+		return poidsSelonMoyenneHFR;
+	}
+
+
+	public void setPoidsSelonMoyenneHFR(double poidsSelonMoyenneHFR) {
+		this.poidsSelonMoyenneHFR = poidsSelonMoyenneHFR;
+	}
+
+
+	public double getPointure() {
+		return pointure;
+	}
+
+
+	public void setPointure(double pointure) {
+		this.pointure = pointure;
+	}
+
+
+	public int getTaille() {
+		return taille;
+	}
+
+
+	public void setTaille(int taille) {
+		this.taille = taille;
+	}
+
+
+	public char getSexe() {
+		return sexe;
+	}
+
+
+	public void setSexe(char sexe) {
+		this.sexe = sexe;
+	}
+
+
+	public double getVMA() {
+		return VMA;
+	}
+
+
+	public void setVMA(double vMA) {
+		VMA = vMA;
+	}
+
+
+	public double getIMC() {
+		return IMC;
+	}
+
+
+	public void setIMC(double iMC) {
+		IMC = iMC;
+	}
+
+
+	public double getIMG() {
+		return IMG;
+	}
+
+
+	public void setIMG(double iMG) {
+		IMG = iMG;
+	}
+
+
+	public Date getDateNaissance() {
+		return dateNaissance;
+	}
+
+
+	public void setDateNaissance(Date dateNaissance) {
+		this.dateNaissance = dateNaissance;
+	}
+
+
+	public double getCuisse() {
+		return cuisse;
+	}
+
+
+	public void setCuisse(double cuisse) {
+		this.cuisse = cuisse;
+	}
+
+
+	public double getMollet() {
+		return mollet;
+	}
+
+
+	public void setMollet(double mollet) {
+		this.mollet = mollet;
+	}
+
+
+	public int getFcRepos() {
+		return fcRepos;
+	}
+
+
+	public void setFcRepos(int fcRepos) {
+		this.fcRepos = fcRepos;
+	}
+
+
+	public int getFcMaxReele() {
+		return fcMaxReele;
+	}
+
+
+	public void setFcMaxReele(int fcMaxReele) {
+		this.fcMaxReele = fcMaxReele;
+	}
+
+
+	public int getFcMaxTheorique() {
+		return fcMaxTheorique;
+	}
+
+
+	public void setFcMaxTheorique(int fcMaxTheorique) {
+		this.fcMaxTheorique = fcMaxTheorique;
+	}
+
+
 	public List<Long> getActivityIds() {
 		return activityIds;
 	}
