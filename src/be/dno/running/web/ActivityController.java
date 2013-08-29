@@ -17,6 +17,7 @@ import be.dno.running.entities.User;
 import be.dno.running.entities.xml.garmin.gpx.Gpx;
 import be.dno.running.entities.xml.garmin.tcx.TcxTrainingCenterDatabase;
 import be.dno.running.factories.ActivityFactory;
+import be.dno.running.helper.MultiPartFileUpload;
 import be.dno.running.persistence.ActivityDao;
 import be.dno.running.persistence.GenericDao;
 import be.dno.running.xml.XmlToJavaConverter;

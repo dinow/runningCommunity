@@ -1,4 +1,4 @@
-package be.dno.running.web;
+package be.dno.running.helper;
 
 import org.gmr.web.multipart.GMultipartFile;
 
