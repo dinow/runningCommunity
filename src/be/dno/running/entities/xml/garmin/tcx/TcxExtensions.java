@@ -10,6 +10,9 @@ public class TcxExtensions {
 	@XStreamAlias("TPX")
 	private TcxTPX tpx;
 	
+	@XStreamAlias("FatCalories")
+	private TcxValueString fatCalories;
+	
 	@XStreamImplicit(itemFieldName="LX")
 	private List<TcxLX> lx;
 
@@ -20,4 +23,9 @@ public class TcxExtensions {
 	public List<TcxLX> getLx() {
 		return lx;
 	}
+
+	public TcxValueString getFatCalories() {
+		return fatCalories;
+	}
+	
 }

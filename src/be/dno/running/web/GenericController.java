@@ -23,14 +23,16 @@ public class GenericController {
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public ModelAndView gotohome(HttpServletRequest request) {
 		UserService userService = UserServiceFactory.getUserService();
-		User user = userDao.getById(userService.getCurrentUser().getUserId());
-		if (user == null){
-			log.info("First login of " + userService.getCurrentUser().getNickname());
-			user = new User();
-			user.setGoogleUserName(userService.getCurrentUser().getNickname());
-			user.setUserID(userService.getCurrentUser().getUserId());
-			user = userDao.create(user);
-		}	
+		if (userService.getCurrentUser() != null){
+			User user = userDao.getById(userService.getCurrentUser().getUserId());
+			if (user == null){
+				log.info("First login of " + userService.getCurrentUser().getNickname());
+				user = new User();
+				user.setGoogleUserName(userService.getCurrentUser().getNickname());
+				user.setUserID(userService.getCurrentUser().getUserId());
+				user = userDao.create(user);
+			}	
+		}
 		return new ModelAndView("home");
 	}
 	

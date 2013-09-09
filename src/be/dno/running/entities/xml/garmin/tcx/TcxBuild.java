@@ -7,13 +7,31 @@ public class TcxBuild {
 	@XStreamAlias("Version")
 	private TcxVersion version;
 
+	@XStreamAlias("Type")
+	private String type;
+	
+	@XStreamAlias("Time")
+	private String time;
+	
+	@XStreamAlias("Builder")
+	private String builder;
+	
 	public TcxVersion getVersion() {
 		return version;
 	}
 
-	@Override
-	public String toString() {
-		return "Build [version=" + version + "]";
+	public String getType() {
+		return type;
 	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public String getBuilder() {
+		return builder;
+	}
+
+	
 
 }
