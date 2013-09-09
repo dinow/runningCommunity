@@ -1,0 +1,8 @@
+Pour chaque badge, le lier soit à un challenge, soit à un milestone d'une sortie:
+
+ - > 2h
+ - > 20k
+ - > Regularité
+ - > Soniade :D
+ 
+Best 1k, 5k, 10k

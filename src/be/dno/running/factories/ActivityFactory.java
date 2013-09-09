@@ -113,6 +113,81 @@ public class ActivityFactory {
 		
 	}
 	
+	private static ActivityCalculatedValues getGpxActivityCalculatedValues(List<GpxTrkpt> trckPoints){
+		ActivityCalculatedValues acv = new ActivityCalculatedValues();
+		
+		int averageBpm = 0;
+		int cptLapWithBPM = 0;
+		double totalDistance = 0.0;
+		long totalTime = 0;
+		int elevationPositive = 0;
+		int maxBpm = 0;
+		for (int i = 1; i < trckPoints.size(); i++){
+			GpxTrkpt lap = trckPoints.get(i);
+			if (lap.getExtensions() != null && lap.getExtensions().getTrackPointExtension() != null && lap.getExtensions().getTrackPointExtension().getHr() != null){
+				averageBpm += Integer.parseInt(lap.getExtensions().getTrackPointExtension().getHr());
+				cptLapWithBPM++;
+			}
+			String sTimePrevious = trckPoints.get(i-1).getTime();
+			String sTime = trckPoints.get(i).getTime();
+			if (null != sTimePrevious && null != sTime){
+				long msPrevious = DatatypeConverter.parseDateTime(sTimePrevious).getTimeInMillis();
+				long msCurrent = DatatypeConverter.parseDateTime(sTime).getTimeInMillis();
+				long elasped = msCurrent-msPrevious;
+				totalTime += elasped;
+			}else{
+				totalTime += 1000;
+			}
+			Point pPrevious = getPointFromCoords(trckPoints.get(i-1).getLon(),trckPoints.get(i-1).getLat());
+			Point pCurrent = getPointFromCoords(trckPoints.get(i).getLon(),trckPoints.get(i).getLat());
+			
+			if (null != pPrevious && null != pCurrent){
+				double distance = EarthCalc.getDistance(pPrevious, pCurrent); //in meters
+				if ("NaN".equals(distance+"")){
+					log.warning("Cannot get distance for some points...");
+					log.fine("pPrevious : " + pPrevious);
+					log.fine("pCurrent : " + pCurrent);
+					log.fine("distance : " + distance);
+				}else{
+					totalDistance += distance;
+				}
+			}
+			if (lap.getExtensions() != null && lap.getExtensions().getTrackPointExtension() != null && lap.getExtensions().getTrackPointExtension().getHr() != null){
+				int lapMaxBpm = Integer.parseInt(lap.getExtensions().getTrackPointExtension().getHr());
+				if (lapMaxBpm > maxBpm){
+					maxBpm = lapMaxBpm;
+				}
+			}
+			String sAltPre = trckPoints.get(i-1).getEle();
+			String sAlt = trckPoints.get(i).getEle();
+			if (null != sAltPre && null != sAlt){
+				double alttpprevious = Double.parseDouble(sAltPre);
+				double alttp = Double.parseDouble(sAlt);
+				double elevGain = alttp-alttpprevious;
+				if (elevGain > 0.0){
+					elevationPositive += (elevGain);
+				}
+			}
+		}
+		if (cptLapWithBPM != 0){
+			averageBpm /= cptLapWithBPM;
+		}else{
+			averageBpm = 0;
+		}
+		
+		totalTime /= 1000;
+		totalDistance /= 1000;
+
+		acv.setAverageBpm(averageBpm);
+		acv.setTotalTime(totalTime);
+		acv.setTotalDistance(totalDistance);
+		acv.setMaxBpm(maxBpm);
+		acv.setElevation(elevationPositive);
+		
+		
+		return acv;
+	}
+	
 	private static ActivityCalculatedValues getTcxActivityCalculatedValues(List<TcxLap> laps){
 		ActivityCalculatedValues acv = new ActivityCalculatedValues();
 		
@@ -342,24 +417,69 @@ public class ActivityFactory {
 			log.severe(ex.getMessage());
 		}
 		
-		activity.setAverageBpm(getAverageBpmGpx(trckPoints));
-		activity.setElevationPositive(getElevationPositiveGpx(trckPoints));
-		activity.setMaxBpm(getMaxBpmGpx(trckPoints));
-		activity.setTotalTime(getTotalTimeGpx(trckPoints));
-		activity.setTotalDistance(ConvertHelper.limitDecimal(getTotalDistanceGpx(trckPoints)));
+		ActivityCalculatedValues acv = getGpxActivityCalculatedValues(trckPoints);
+		
+		activity.setAverageBpm(acv.getAverageBpm());
+		activity.setElevationPositive(acv.getElevation());
+		activity.setMaxBpm(acv.getMaxBpm());
+		activity.setTotalTime(acv.getTotalTime());
+		activity.setTotalDistance(ConvertHelper.limitDecimal(acv.getTotalDistance()));
 		activity.setSpeed(ConvertHelper.limitDecimal((activity.getTotalDistance()) / (activity.getTotalTime() / 60 / 60)));
 		
 		double secondsforonekilo = activity.getTotalTime() / activity.getTotalDistance();
 		activity.setPace(ConvertHelper.toPace(Double.valueOf(secondsforonekilo).longValue()));
-		buildLapsByDistanceGpx(trckPoints);
-		//activity.setLapsByDistance(buildLapsByDistanceGpx(trckPoints));
+		
+		//Try to get the best 1k somewhere...
+		long start = System.currentTimeMillis();
+		if (activity.getTotalDistance() > 1){
+			//try to calculate the best 1k... have to find a more efficient way...
+			double currentDistance = 0.0;
+			long totalTime = 0l;
+			long bestTime = 0l;
+			int i = 1;
+			int currentIndex = 1;
+			while (i < trckPoints.size()){
+				Point pPrevious = getPointFromCoords(trckPoints.get(i-1).getLon(),trckPoints.get(i-1).getLat());
+				Point pCurrent = getPointFromCoords(trckPoints.get(i).getLon(),trckPoints.get(i).getLat());
+				if (null != pPrevious && null != pCurrent){
+					double distance = EarthCalc.getDistance(pPrevious, pCurrent); //in meters
+					currentDistance += distance;
+				}
+				String sTimePrevious = trckPoints.get(i-1).getTime();
+				String sTime = trckPoints.get(i).getTime();
+				if (null != sTimePrevious && null != sTime){
+					long msPrevious = DatatypeConverter.parseDateTime(sTimePrevious).getTimeInMillis();
+					long msCurrent = DatatypeConverter.parseDateTime(sTime).getTimeInMillis();
+					long elasped = msCurrent-msPrevious;
+					totalTime += elasped;
+				}else{
+					totalTime += 1000;
+				}
+				if (currentDistance >= 1000){	
+					if (totalTime < bestTime || bestTime == 0l){
+						bestTime = totalTime;
+					}
+					
+					currentDistance = 0.0;
+					totalTime = 0l;
+					currentIndex++;
+					i = currentIndex;
+				}else{
+					i++;
+				}
+				
+			}
+			long end = System.currentTimeMillis();
+			System.out.println("Best time for 1k is " + (bestTime/1000) + " calc time : " + ((end-start)/1000));
+		}
+		
 		
 		
 		return activity;
 	}
 	
 	
-	public static Map<String,List<Lap>> buildLapsByDistanceGpx(List<GpxTrkpt> trckPoints){
+	/*private static Map<String,List<Lap>> buildLapsByDistanceGpx(List<GpxTrkpt> trckPoints){
 		Map<String,List<Lap>> returnMap = new HashMap<String, List<Lap>>();
 		Integer[] distances = new Integer[]{250,500,1000,2000,5000,10000};
 		Map<Integer, Lap> trackingCounters = new HashMap<Integer,Lap>();
@@ -404,110 +524,18 @@ public class ActivityFactory {
 			}
 		}
 		
-		/*for (String key : returnMap.keySet()){
-			System.out.println("KEY : " + key);
-			for (Lap lap : returnMap.get(key)){
-				System.out.println(lap);
-			}
-		} */
+		
 		
 		return returnMap;
-	}
-	
-	
-	public static int getAverageBpmGpx(List<GpxTrkpt> trckPoints){
-		int averageBpm = 0;
-		int cptLapWithBPM = 0;
-		for (GpxTrkpt lap : trckPoints){
-			if (lap.getExtensions() != null && lap.getExtensions().getTrackPointExtension() != null && lap.getExtensions().getTrackPointExtension().getHr() != null){
-				averageBpm += Integer.parseInt(lap.getExtensions().getTrackPointExtension().getHr());
-				cptLapWithBPM++;
-			}
-		}
-		if (cptLapWithBPM != 0){
-			averageBpm /= cptLapWithBPM;
-		}else{
-			averageBpm = 0;
-		}
-		return averageBpm;
-	}
-	
-	public static long getTotalTimeGpx(List<GpxTrkpt> trckPoints){
-		long totalTime = 0;
+	}*/
 
-		for (int i = 1; i < trckPoints.size(); i++){
-			String sTimePrevious = trckPoints.get(i-1).getTime();
-			String sTime = trckPoints.get(i).getTime();
-			if (null != sTimePrevious && null != sTime){
-				long msPrevious = DatatypeConverter.parseDateTime(sTimePrevious).getTimeInMillis();
-				long msCurrent = DatatypeConverter.parseDateTime(sTime).getTimeInMillis();
-				long elasped = msCurrent-msPrevious;
-				totalTime += elasped;
-			}else{
-				totalTime += 1000;
-			}
-		}
-		return totalTime / 1000;
-	}
 	
-	public static double getTotalDistanceGpx(List<GpxTrkpt> trckPoints){
-		double totalDistance = 0.0;
-		for (int i = 1; i < trckPoints.size(); i++){
-			Point pPrevious = getPointFromCoords(trckPoints.get(i-1).getLon(),trckPoints.get(i-1).getLat());
-			Point pCurrent = getPointFromCoords(trckPoints.get(i).getLon(),trckPoints.get(i).getLat());
-			
-			if (null != pPrevious && null != pCurrent){
-				double distance = EarthCalc.getDistance(pPrevious, pCurrent); //in meters
-				if ("NaN".equals(distance+"")){
-					log.warning("Cannot get distance for some points...");
-					log.fine("pPrevious : " + pPrevious);
-					log.fine("pCurrent : " + pCurrent);
-					log.fine("distance : " + distance);
-				}else{
-					totalDistance += distance;
-				}
-			}
-		}
-		return totalDistance / 1000;
-	}
 	
 	private static Point getPointFromCoords(String _lon, String _lat){
 		Coordinate lat = new DegreeCoordinate(Double.parseDouble(_lat));
 		Coordinate lng = new DegreeCoordinate(Double.parseDouble(_lon));
 		return new Point(lat, lng);
 	}
-	
-	public static int getMaxBpmGpx(List<GpxTrkpt> trckPoints){
-		int maxBpm = 0;
-		for (GpxTrkpt lap : trckPoints){
-			if (lap.getExtensions() != null && lap.getExtensions().getTrackPointExtension() != null && lap.getExtensions().getTrackPointExtension().getHr() != null){
-				int lapMaxBpm = Integer.parseInt(lap.getExtensions().getTrackPointExtension().getHr());
-				if (lapMaxBpm > maxBpm){
-					maxBpm = lapMaxBpm;
-				}
-			}
-		}
-		return maxBpm;
-	}
-
-	public static int getElevationPositiveGpx(List<GpxTrkpt> trckPoints) {
-		int elevationPositive = 0;
-		for (int i = 1; i < trckPoints.size(); i++){
-			String sAltPre = trckPoints.get(i-1).getEle();
-			String sAlt = trckPoints.get(i).getEle();
-			if (null != sAltPre && null != sAlt){
-				double alttpprevious = Double.parseDouble(sAltPre);
-				double alttp = Double.parseDouble(sAlt);
-				double elevGain = alttp-alttpprevious;
-				if (elevGain > 0.0){
-					elevationPositive += (elevGain);
-				}
-			}
-		}
-		return elevationPositive;
-	}
-	
-
 
 	private static double getMaxDeviationSecondForLapsBySameDistance(List<Lap> lapsBySameDistance, double averageSecondForLapsBySameDistance) {
 		double maxDeviationSecondForLapsBySameDistance = 0.0;
