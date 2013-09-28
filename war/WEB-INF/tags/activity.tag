@@ -54,5 +54,15 @@
 		<th>Calories</th>
 		<td>${activity.totalCalories }</td>
 	</tr>
+	
+	<tr>
+		<th>Meilleurs temps</th>
+		<td>
+			<c:forEach items="${activity.bestTimes}" var="bestTime">
+				${bestTime.distance }k : ${bestTime.display }<br/>
+			</c:forEach>
+		
+		</td>
+	</tr>
 
 </table>

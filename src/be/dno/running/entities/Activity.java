@@ -57,6 +57,9 @@ public class Activity implements Serializable {
 	private List<Lap> lapsBySplitDistance;
 	
 	@Persistent
+	private List<BestTimes> bestTimes; 
+	
+	@Persistent
 	private long totalTime = -1;
 	
 	@Persistent
@@ -100,6 +103,14 @@ public class Activity implements Serializable {
 		this.userId = userId;
 	}
 	
+	public List<BestTimes> getBestTimes() {
+		return bestTimes;
+	}
+
+	public void setBestTimes(List<BestTimes> bestTimes) {
+		this.bestTimes = bestTimes;
+	}
+
 	public Date getUploadDate() {
 		return uploadDate;
 	}

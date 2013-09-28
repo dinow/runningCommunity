@@ -1,9 +1,18 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="com.google.appengine.api.users.*" %>
+<%@ page import="be.dno.running.persistence.GenericDao" %>
+<%@ page import="be.dno.running.entities.User" %>
 <div class="headerDiv">
 	<%UserService userService = UserServiceFactory.getUserService();
 		if (userService.getCurrentUser() != null) {
-			
+			GenericDao<User> userDao = new GenericDao<User>(User.class);
+			User user = userDao.getById(userService.getCurrentUser().getUserId());
+			if (user == null){
+				user = new User();
+				user.setGoogleUserName(userService.getCurrentUser().getNickname());
+				user.setUserID(userService.getCurrentUser().getUserId());
+				user = userDao.create(user);
+			}	
 		%>
 			<a href="/pages/home.jsp" title="Retour à la page d'accueil">Accueil</a>
 			&nbsp;|&nbsp;<a href="/show_my_activities.do" title="Voir mes activités">Mes activités</a>

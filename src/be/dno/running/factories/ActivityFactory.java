@@ -2,13 +2,17 @@ package be.dno.running.factories;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.xml.bind.DatatypeConverter;
 
 import be.dno.running.entities.Activity;
+import be.dno.running.entities.BestTimes;
 import be.dno.running.entities.Lap;
 import be.dno.running.entities.xml.garmin.gpx.Gpx;
 import be.dno.running.entities.xml.garmin.gpx.GpxTrkpt;
@@ -40,6 +44,8 @@ public class ActivityFactory {
 		List<Lap> lapBySameDistance;
 		
 		List<Lap> lapBySameTime;
+		
+		List<Point> pointList;
 		
 		private Map<Long, List<Lap>> lapsByDistance;
 		
@@ -109,13 +115,19 @@ public class ActivityFactory {
 		public void setLapsByDistance(Map<Long, List<Lap>> lapsByDistance) {
 			this.lapsByDistance = lapsByDistance;
 		}
+		public List<Point> getPointList() {
+			return pointList;
+		}
+		public void setPointList(List<Point> pointList) {
+			this.pointList = pointList;
+		}
 		
 		
 	}
 	
 	private static ActivityCalculatedValues getGpxActivityCalculatedValues(List<GpxTrkpt> trckPoints){
 		ActivityCalculatedValues acv = new ActivityCalculatedValues();
-		
+		List<Point> pointList = new ArrayList<Point>();
 		int averageBpm = 0;
 		int cptLapWithBPM = 0;
 		double totalDistance = 0.0;
@@ -140,6 +152,10 @@ public class ActivityFactory {
 			}
 			Point pPrevious = getPointFromCoords(trckPoints.get(i-1).getLon(),trckPoints.get(i-1).getLat());
 			Point pCurrent = getPointFromCoords(trckPoints.get(i).getLon(),trckPoints.get(i).getLat());
+			pointList.add(pPrevious);
+			if (i == trckPoints.size()-1){
+				pointList.add(pCurrent);
+			}
 			
 			if (null != pPrevious && null != pCurrent){
 				double distance = EarthCalc.getDistance(pPrevious, pCurrent); //in meters
@@ -183,7 +199,7 @@ public class ActivityFactory {
 		acv.setTotalDistance(totalDistance);
 		acv.setMaxBpm(maxBpm);
 		acv.setElevation(elevationPositive);
-		
+		acv.setPointList(pointList);
 		
 		return acv;
 	}
@@ -231,7 +247,7 @@ public class ActivityFactory {
 					}
 				}
 			}
-			
+			 
 			Double meters = Double.parseDouble(lap.getDistanceMeters());
 			List<Lap> currentLapsForDistance = mapByDistance.get(meters);
 			if (currentLapsForDistance == null) currentLapsForDistance = new ArrayList<Lap>();
@@ -430,52 +446,69 @@ public class ActivityFactory {
 		activity.setPace(ConvertHelper.toPace(Double.valueOf(secondsforonekilo).longValue()));
 		
 		//Try to get the best 1k somewhere...
-		long start = System.currentTimeMillis();
-		if (activity.getTotalDistance() > 1){
-			//try to calculate the best 1k... have to find a more efficient way...
-			double currentDistance = 0.0;
-			long totalTime = 0l;
-			long bestTime = 0l;
-			int i = 1;
-			int currentIndex = 1;
-			while (i < trckPoints.size()){
-				Point pPrevious = getPointFromCoords(trckPoints.get(i-1).getLon(),trckPoints.get(i-1).getLat());
-				Point pCurrent = getPointFromCoords(trckPoints.get(i).getLon(),trckPoints.get(i).getLat());
-				if (null != pPrevious && null != pCurrent){
-					double distance = EarthCalc.getDistance(pPrevious, pCurrent); //in meters
-					currentDistance += distance;
-				}
-				String sTimePrevious = trckPoints.get(i-1).getTime();
-				String sTime = trckPoints.get(i).getTime();
-				if (null != sTimePrevious && null != sTime){
-					long msPrevious = DatatypeConverter.parseDateTime(sTimePrevious).getTimeInMillis();
-					long msCurrent = DatatypeConverter.parseDateTime(sTime).getTimeInMillis();
-					long elasped = msCurrent-msPrevious;
-					totalTime += elasped;
-				}else{
-					totalTime += 1000;
-				}
-				if (currentDistance >= 1000){	
-					if (totalTime < bestTime || bestTime == 0l){
-						bestTime = totalTime;
-					}
-					
-					currentDistance = 0.0;
-					totalTime = 0l;
-					currentIndex++;
-					i = currentIndex;
-				}else{
-					i++;
-				}
-				
-			}
-			long end = System.currentTimeMillis();
-			System.out.println("Best time for 1k is " + (bestTime/1000) + " calc time : " + ((end-start)/1000));
-		}
+		Set<Double> distances = new HashSet<Double>();
+		distances.add(0.4);
+		distances.add(1.0);
+		distances.add(5.0);
+		distances.add(10.0);
+		List<BestTimes> bestTimes = getBestTimes(trckPoints, distances, acv );
+		/*for(BestTimes bt : bestTimes){
+			System.out.println("Best time for "+bt.getDistance()+"k is " + bt.toString());
+		}*/
+		activity.setBestTimes(bestTimes);
 		
 		
 		
 		return activity;
+	}
+	
+	private static List<BestTimes> getBestTimes(List<GpxTrkpt> trckPoints, Set<Double> distances, ActivityCalculatedValues acv ){
+		List<BestTimes> bestTimes = new ArrayList<BestTimes>();
+		
+		for(Double distance : distances){
+			if (acv.getTotalDistance() > distance){
+				double currentDistance = 0.0;
+				long totalTime = 0l;
+				long bestTime = 0l;
+				int i = 1;
+				int currentIndex = 1;
+				while (i < trckPoints.size()){
+					currentDistance += getDistance(acv.getPointList().get(i-1),acv.getPointList().get(i));
+					totalTime += getEleaspedTime(trckPoints.get(i-1), trckPoints.get(i));
+					if (currentDistance >= (distance*1000)){	
+						if (totalTime < bestTime || bestTime == 0l){
+							bestTime = totalTime;
+						}
+					}
+					
+					while(currentDistance >= (distance*1000)){ //Soustraire le début pour repasser sous les 1k
+						currentDistance -= getDistance(acv.getPointList().get(currentIndex-1),acv.getPointList().get(currentIndex));
+						totalTime -= getEleaspedTime(trckPoints.get(currentIndex-1), trckPoints.get(currentIndex));
+						currentIndex++;
+					}
+					i++;
+					
+				}
+				
+				bestTimes.add(new BestTimes(distance, bestTime));
+			}
+		}
+		return bestTimes;
+	}
+	
+	private static double getDistance(Point point1, Point point2){
+		return EarthCalc.getDistance(point1, point2);
+	}
+	
+	private static long getEleaspedTime(GpxTrkpt point1, GpxTrkpt point2){
+		String sTimePoint1 = point1.getTime();
+		String sTimePoint2 = point2.getTime();
+		if (null != sTimePoint1 && null != sTimePoint2){
+			long msPoint1 = DatatypeConverter.parseDateTime(sTimePoint1).getTimeInMillis();
+			long msPoint2 = DatatypeConverter.parseDateTime(sTimePoint2).getTimeInMillis();
+			return msPoint2-msPoint1;
+		}
+		return 1000;
 	}
 	
 	
