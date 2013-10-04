@@ -2,7 +2,9 @@ package be.dno.running.web;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,7 +62,7 @@ public class ActivityController {
 		User currentUser = userDao.getById(userService.getCurrentUser().getUserId());
 		
 		List<Activity> activities = new ArrayList<Activity>();
-		if (currentUser == null){
+		if (currentUser == null || currentUser.getActivityIds() == null){
 			return new ModelAndView("show_activities" , "activities", activities);
 		}
 		for(Long activityId : currentUser.getActivityIds()){
@@ -74,7 +76,19 @@ public class ActivityController {
 	@RequestMapping(value = "/show_others_activities", method = RequestMethod.GET)
 	public ModelAndView showOtherActivities(HttpServletRequest request) {
 		ActivityDao adao = new ActivityDao();
-		return new ModelAndView("show_others_activities","activities",adao.getPublicActivities());
+		List<Activity> publicActivities = adao.getPublicActivities();
+		
+		Map<String, List<Activity>> activitiesByUsers = new HashMap<String, List<Activity>>();
+		for (Activity activity : publicActivities){
+			String userName = activity.getUserName();
+			List<Activity> actForUser = activitiesByUsers.get(userName);
+			if (actForUser == null){
+				actForUser = new ArrayList<Activity>();
+			}
+			actForUser.add(activity);
+			activitiesByUsers.put(userName, actForUser);
+		}
+		return new ModelAndView("show_others_activities","activities",activitiesByUsers);
 	}
 	
 	@RequestMapping(value = "/saveActivity", method = RequestMethod.POST)
@@ -114,6 +128,7 @@ public class ActivityController {
 	
 	
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/upload_activity", method = RequestMethod.POST)
 	public ModelAndView postUpload(MultiPartFileUpload upload, HttpServletRequest request) {
 		UserService userService = UserServiceFactory.getUserService();
@@ -168,6 +183,7 @@ public class ActivityController {
 	    return new ModelAndView("fail","message","No uploaded file ???");
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Class getFileCategory(String fileContent) {
 		if(fileContent.contains("<TrainingCenterDatabase")){
 			return TcxTrainingCenterDatabase.class;

@@ -12,10 +12,12 @@ public class ActivityDao {
 	
 	protected static final PersistenceManager pm = PMFactory.getPM();
 
+	@SuppressWarnings("unchecked")
 	public List<Activity> getPublicActivities(){
 		Query q = pm.newQuery(Activity.class);
 		q.setFilter("activityPrivate == false");
-		List<Activity> results = (List) q.execute();
+		q.setOrdering("dateDebut desc");
+		List<Activity> results = (List<Activity>) q.execute();
 		q.closeAll();
 		if (results == null) results = new ArrayList<Activity>();
 		return results;

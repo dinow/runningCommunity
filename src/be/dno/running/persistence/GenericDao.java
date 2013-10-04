@@ -7,8 +7,6 @@ import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import com.google.appengine.api.datastore.Key;
-
 
 
 public class GenericDao <T>{
@@ -48,9 +46,10 @@ public class GenericDao <T>{
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<T> getAll(){
 		Query q = pm.newQuery(type);
-		List<T> results = (List) q.execute();
+		List<T> results = (List<T>) q.execute();
 		q.closeAll();
 		return results;
 	}

@@ -7,6 +7,7 @@ import com.wappworks.xstream.XStreamGae;
 
 public class XmlToJavaConverter {
 	private static final Logger log = Logger.getLogger(XmlToJavaConverter.class.getName());
+	@SuppressWarnings("rawtypes")
 	public static Object convert(String xml, Class mainClass){
 		XStreamGae xstream = new XStreamGae();
 		Object ret = null;

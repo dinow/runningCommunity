@@ -12,6 +12,7 @@
 <body>
 	<%@ include file="header.jsp"%>
 	<div class="mainPage">
+	<a href="/pages/create_challenge.jsp" title="Créer un challenge">Créer nouveau challenge</a>
 	<h1>Liste des challenges</h1>
 	<c:if test="${empty challenges}">
 		Il n'y a pas encore de challenges!

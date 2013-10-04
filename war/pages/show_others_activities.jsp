@@ -17,10 +17,15 @@
 		Pas d'activités publiques uploadées.
 	</c:if>
 	<c:if test="${activities != null}">
-		<c:forEach items="${activities}" var="activity">
-			<tags:activity activity="${activity}"  />
-			<br />
+		
+		<c:forEach items="${activities}" var="mapEntry">
+			<h2>${mapEntry.key }</h2>
+			<c:forEach items="${mapEntry.value }" var="curActivities">
+				<tags:activity activity="${curActivities}"  />
+				<br />
+			</c:forEach>
 			
+			<!-- 
 		<c:if test="${! rh:isCollectionEmpty(activity.lapsBySameDistance) }">
 				<h3>Laps identiques selon la distance, temps moyen :
 					${activity.averageSecondForLapsBySameDistance } écart maximun :
@@ -40,6 +45,7 @@
 				<tags:laps listOfLaps="${activity.laps}" detailedView="${false }" />
 				<br />
 			</c:if>
+			 -->
 			<hr />
 			
 			<br />
