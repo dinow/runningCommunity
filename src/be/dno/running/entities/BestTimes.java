@@ -28,9 +28,6 @@ public class BestTimes implements Serializable{
 	
 	public BestTimes(Double distance, long bestTime){
 		this.distance = distance;
-		//Double bestRaw = Double.parseDouble(bestTime+"");
-		//Double calcVal = bestRaw / this.distance;
-		//time = calcVal.longValue();
 		this.time = bestTime;
 	}
 	

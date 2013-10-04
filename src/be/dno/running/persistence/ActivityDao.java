@@ -16,7 +16,6 @@ public class ActivityDao {
 	public List<Activity> getPublicActivities(){
 		Query q = pm.newQuery(Activity.class);
 		q.setFilter("activityPrivate == false");
-		q.setOrdering("dateDebut desc");
 		List<Activity> results = (List<Activity>) q.execute();
 		q.closeAll();
 		if (results == null) results = new ArrayList<Activity>();
